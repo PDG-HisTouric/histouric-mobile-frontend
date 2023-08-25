@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:histouric_mobile_frontend/domain/domain.dart';
 
 import '../../../config/config.dart';
-import '../repositories/bic_provider.dart';
+import '../bic/bic_repository_provider.dart';
 
 class MapState {
   final bool areMarkersReady;
