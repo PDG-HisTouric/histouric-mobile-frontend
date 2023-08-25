@@ -8,15 +8,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
-        child: Scaffold(
-      body: Stack(
-        children: [
-          CustomGoogleMap(
-            initialLat: 3.341571,
-            initialLng: -76.530198,
-          ),
-        ],
+      child: Scaffold(
+        body: Stack(
+          children: [
+            CustomGoogleMap(initialLat: 3.341571, initialLng: -76.530198),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
