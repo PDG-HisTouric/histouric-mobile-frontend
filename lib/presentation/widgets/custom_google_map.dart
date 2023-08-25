@@ -22,7 +22,6 @@ class __MapViewState extends ConsumerState<CustomGoogleMap> {
   @override
   Widget build(BuildContext context) {
     final mapController = ref.watch(mapControllerProvider);
-    print(mapController.markers.length);
 
     return GoogleMap(
       markers: mapController.markersSet,
