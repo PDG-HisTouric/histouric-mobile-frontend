@@ -9,7 +9,8 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: isDarkMode ? Brightness.dark : Brightness.light,
-      colorSchemeSeed: Colors.white,
+      colorSchemeSeed:
+          isDarkMode ? const Color(0xFFE7C18B) : const Color(0xFFE7C18B),
     );
   }
 }
