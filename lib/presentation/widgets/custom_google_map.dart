@@ -21,7 +21,7 @@ class CustomGoogleMap extends ConsumerStatefulWidget {
 class __MapViewState extends ConsumerState<CustomGoogleMap> {
   @override
   Widget build(BuildContext context) {
-    final mapController = ref.watch(mapControllerProvider);
+    final mapController = ref.watch(mapControllerProvider(context));
 
     return GoogleMap(
       markers: mapController.markersSet,
@@ -31,13 +31,12 @@ class __MapViewState extends ConsumerState<CustomGoogleMap> {
           widget.initialLat,
           widget.initialLng,
         ),
-        zoom: 12,
+        zoom: 18,
       ),
       myLocationEnabled: true,
       zoomControlsEnabled: false,
-      onMapCreated: (GoogleMapController controller) {
-        ref.read(mapControllerProvider.notifier).setMapController(controller);
-      },
+      onMapCreated:
+          ref.read(mapControllerProvider(context).notifier).setMapController,
     );
   }
 }

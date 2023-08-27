@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:histouric_mobile_frontend/domain/domain.dart';
 
-import '../repositories/bic_provider.dart';
+import '../../../config/config.dart';
+import '../bic/bic_repository_provider.dart';
 
 class MapState {
   final bool areMarkersReady;
@@ -38,8 +41,12 @@ class MapState {
 
 class MapNotifier extends StateNotifier<MapState> {
   final BICRepository bicRepository;
+  final BuildContext context;
 
-  MapNotifier({required this.bicRepository}) : super(MapState()) {
+  MapNotifier({
+    required this.bicRepository,
+    required this.context,
+  }) : super(MapState()) {
     _loadBICs();
   }
 
@@ -51,6 +58,7 @@ class MapNotifier extends StateNotifier<MapState> {
         longitude: bic.longitude,
         name: bic.name,
         snippet: bic.description,
+        bicId: bic.bicId,
       );
     }
     while (state.markers.length != bics.length) {
@@ -77,6 +85,7 @@ class MapNotifier extends StateNotifier<MapState> {
     required double latitude,
     required double longitude,
     required String name,
+    required String bicId,
     String? snippet,
   }) {
     final newMarker = Marker(
@@ -85,6 +94,9 @@ class MapNotifier extends StateNotifier<MapState> {
       infoWindow: InfoWindow(
         title: name,
         snippet: snippet,
+        onTap: () {
+          context.push('/$bicScreenPath/$bicId');
+        },
       ),
     );
 
@@ -92,8 +104,8 @@ class MapNotifier extends StateNotifier<MapState> {
   }
 }
 
-final mapControllerProvider =
-    StateNotifierProvider.autoDispose<MapNotifier, MapState>((ref) {
+final mapControllerProvider = StateNotifierProvider.autoDispose
+    .family<MapNotifier, MapState, BuildContext>((ref, context) {
   final bicRepository = ref.watch(bicRepositoryProvider);
-  return MapNotifier(bicRepository: bicRepository);
+  return MapNotifier(bicRepository: bicRepository, context: context);
 });

@@ -1,3 +1,5 @@
+import 'history_bic.dart';
+
 class BIC {
   final String bicId;
   final String name;
@@ -6,6 +8,8 @@ class BIC {
   final String description;
   final bool exists;
   final List<String> nicknames;
+  final List<String> images;
+  final List<HistoryBIC> histories;
 
   BIC({
     required this.bicId,
@@ -15,5 +19,7 @@ class BIC {
     required this.description,
     required this.exists,
     required this.nicknames,
+    required this.images,
+    required this.histories,
   });
 }
