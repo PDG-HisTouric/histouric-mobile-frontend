@@ -28,10 +28,10 @@ class __MapViewState extends ConsumerState<CustomGoogleMap> {
       mapType: MapType.normal,
       initialCameraPosition: CameraPosition(
         target: LatLng(widget.initialLat, widget.initialLng),
-        zoom: 18,
+        zoom: 15,
       ),
       myLocationEnabled: true,
-      zoomControlsEnabled: false,
+      zoomControlsEnabled: true,
       onMapCreated:
           ref.read(mapControllerProvider(context).notifier).setMapController,
     );

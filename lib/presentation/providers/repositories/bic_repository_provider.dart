@@ -4,5 +4,5 @@ import '../../../domain/domain.dart';
 import '../../../infrastructure/infrastructure.dart';
 
 final bicRepositoryProvider = Provider<BICRepository>((ref) {
-  return BICRepositoryImpl(datasource: SpringBootBICDatasource());
+  return BICRepositoryImpl(datasource: BICDatasourceImpl());
 });
