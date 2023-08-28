@@ -2,10 +2,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:histouric_mobile_frontend/presentation/providers/providers.dart';
 
 import '../../config/config.dart';
 import '../../domain/entities/entities.dart';
+import '../providers/providers.dart';
+import '../widgets/widgets.dart';
 
 class BICScreen extends ConsumerStatefulWidget {
   final String bicId;
@@ -47,6 +48,7 @@ class _BICScreenState extends ConsumerState<BICScreen> {
             ))
           ],
         ),
+        bottomNavigationBar: const CustomBottomNavigation(),
       ),
     );
   }
@@ -158,7 +160,7 @@ class _ImageCard extends StatelessWidget {
 class _TitleAndDescription extends StatelessWidget {
   final BIC bic;
 
-  const _TitleAndDescription({super.key, required this.bic});
+  const _TitleAndDescription({required this.bic});
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +273,7 @@ class _HistoryCard extends StatelessWidget {
 
 class _Histories extends StatelessWidget {
   final BIC bic;
-  const _Histories({super.key, required this.bic});
+  const _Histories({required this.bic});
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +309,7 @@ class _Histories extends StatelessWidget {
 class _GeneralCard extends StatelessWidget {
   final Widget child;
 
-  const _GeneralCard({super.key, required this.child});
+  const _GeneralCard({required this.child});
 
   @override
   Widget build(BuildContext context) {

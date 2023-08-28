@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:histouric_mobile_frontend/domain/entities/history.dart';
-import 'package:histouric_mobile_frontend/presentation/presentation.dart';
+
+import '../../../domain/domain.dart';
+import '../repositories/history_repository_provider.dart';
 
 final historyInfoProvider =
     StateNotifierProvider<HistoryMapNotifier, Map<String, History>>((ref) {

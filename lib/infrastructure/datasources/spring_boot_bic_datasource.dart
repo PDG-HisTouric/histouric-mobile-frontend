@@ -1,5 +1,4 @@
-import 'package:histouric_mobile_frontend/domain/datasources/bic_datasource.dart';
-import 'package:histouric_mobile_frontend/domain/entities/entities.dart';
+import '../../domain/domain.dart';
 
 final List<HistoryBIC> histories = [
   HistoryBIC(

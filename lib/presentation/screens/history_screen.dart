@@ -1,7 +1,9 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/domain.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
@@ -22,11 +24,15 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
 
+  History? history;
+
+  HistouricText? currentHistoryText;
+
   @override
   void initState() {
     super.initState();
-    ref.read(historyInfoProvider.notifier).loadHistory(widget.historyId);
     _initAudioPlayer();
+    ref.read(historyInfoProvider.notifier).loadHistory(widget.historyId);
   }
 
   @override
@@ -38,7 +44,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   Future<void> _initAudioPlayer() async {
     _audioPlayer = AudioPlayer();
     _assetSource = AssetSource('audios/01ElTerremotoDe1925.mp3');
-    await _audioPlayer.setSourceAsset(_assetSource.path);
     _audioPlayer.onDurationChanged.listen((event) {
       setState(() {
         _duration = event;
@@ -47,6 +52,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     _audioPlayer.onPositionChanged.listen((event) {
       setState(() {
         _position = event;
+        updateCurrentTextSegment(event);
       });
     });
     _audioPlayer.onPlayerComplete.listen((event) {
@@ -71,221 +77,214 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     });
   }
 
+  void updateCurrentTextSegment(Duration position) {
+    HistouricText? newHistoryText;
+
+    for (var historyText in history!.texts) {
+      if (position >= Duration(seconds: historyText.startTime)) {
+        newHistoryText = historyText;
+      } else {
+        break;
+      }
+    }
+
+    if (newHistoryText != currentHistoryText) {
+      setState(() {
+        currentHistoryText = newHistoryText;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final history = ref.watch(historyInfoProvider)[widget.historyId];
 
     if (history == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator(strokeWidth: 2.0)),
+      return const SafeArea(
+        child: Scaffold(
+          body: Center(child: CircularProgressIndicator(strokeWidth: 2.0)),
+        ),
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(history.title),
-        backgroundColor: const Color(0xFFCFAF86),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFE7C18B), Color(0xFFA1887F)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+    this.history = history;
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: Text(history.title)),
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFE7C18B), Color(0xFFA1887F)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 200,
-                  child: PageView.builder(
-                    itemCount: history.images.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.network(
-                          history.images[index].imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: NeuBox(
-                    child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nisl quis aliquam ultricies, nunc nisl '
-                      'consequat nunc, sed aliquam nisl nunc eu nisi. '
-                      'Suspendisse potenti. Nulla facilisi. '
-                      'Sed euismod, nisl quis aliquam ultricies, nunc nisl '
-                      'consequat nunc, sed aliquam nisl nunc eu nisi. '
-                      'Suspendisse potenti. Nulla facilisi.',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: NeuBox(
-                    child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nisl quis aliquam ultricies, nunc nisl '
-                      'consequat nunc, sed aliquam nisl nunc eu nisi. '
-                      'Suspendisse potenti. Nulla facilisi. '
-                      'Sed euismod, nisl quis aliquam ultricies, nunc nisl '
-                      'consequat nunc, sed aliquam nisl nunc eu nisi. '
-                      'Suspendisse potenti. Nulla facilisi.',
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 200),
-              ],
-            ),
-          ),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 600),
-            width: MediaQuery.sizeOf(context).width,
-            bottom: 0,
-            child: Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(231, 193, 139, 1.0),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
+            SingleChildScrollView(
               child: Column(
                 children: [
                   const SizedBox(height: 16),
-                  const Text(
-                    'Reproducir',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  SizedBox(
+                    height: 200,
+                    child: PageView.builder(
+                      itemCount: history.images.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.network(
+                            history.images[index].imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${_position.inMinutes}:${_position.inSeconds.remainder(60)}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  if (currentHistoryText != null)
+                    FadeIn(
+                      duration: const Duration(milliseconds: 600),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: NeuBox(
+                          child: Text(
+                            currentHistoryText!.text,
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.justify,
                           ),
                         ),
-                        Text(
-                          '${_duration.inMinutes}:${_duration.inSeconds.remainder(60)}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Slider(
-                    value: _position.inSeconds.toDouble(),
-                    min: 0,
-                    max: _duration.inSeconds.toDouble(),
-                    onChanged: (value) async {
-                      await _audioPlayer.seek(Duration(seconds: value.toInt()));
-                      setState(() {});
-                    },
-                    inactiveColor: Colors.black.withOpacity(0.2),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _audioPlayer.seek(const Duration());
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.skip_previous_outlined),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _audioPlayer.seek(
-                              _position - const Duration(seconds: 10),
-                            );
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.replay_10_outlined),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _isPlaying ? _pause() : _play();
-                          },
-                          icon: Icon(
-                            _isPlaying
-                                ? Icons.pause_circle_filled
-                                : Icons.play_circle_filled,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _audioPlayer.seek(
-                              _position + const Duration(seconds: 10),
-                            );
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.forward_10_outlined),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _audioPlayer.seek(_duration);
-                            setState(() {
-                              _isPlaying = false;
-                            });
-                          },
-                          icon: const Icon(Icons.skip_next_outlined),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const SizedBox(height: 200),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFFCFAF86),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.play_arrow),
-            label: 'Reproducir',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.info_outline),
-            label: 'Información',
-          ),
-        ],
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 600),
+              width: MediaQuery.sizeOf(context).width,
+              bottom: 0,
+              child: Container(
+                height: 200,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(231, 193, 139, 1.0),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Reproducir',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${_position.inMinutes}:${_position.inSeconds.remainder(60)}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${_duration.inMinutes}:${_duration.inSeconds.remainder(60)}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Slider(
+                      value: _position.inSeconds.toDouble(),
+                      min: 0,
+                      max: _duration.inSeconds.toDouble(),
+                      onChanged: (value) async {
+                        await _audioPlayer
+                            .seek(Duration(seconds: value.toInt()));
+                        setState(() {});
+                      },
+                      inactiveColor: Colors.black.withOpacity(0.2),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              _audioPlayer.seek(const Duration());
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.skip_previous_outlined),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              _audioPlayer.seek(
+                                _position - const Duration(seconds: 10),
+                              );
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.replay_10_outlined),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              _isPlaying ? _pause() : _play();
+                            },
+                            icon: Icon(
+                              _isPlaying
+                                  ? Icons.pause_circle_filled
+                                  : Icons.play_circle_filled,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              _audioPlayer.seek(
+                                _position + const Duration(seconds: 10),
+                              );
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.forward_10_outlined),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              _audioPlayer.seek(_duration);
+                              setState(() {
+                                _isPlaying = false;
+                              });
+                            },
+                            icon: const Icon(Icons.skip_next_outlined),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: const CustomBottomNavigation(),
       ),
     );
   }

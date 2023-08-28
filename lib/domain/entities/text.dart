@@ -1,11 +1,11 @@
 class HistouricText {
   final String id;
   final String text;
-  final String section;
+  final int startTime;
 
   HistouricText({
     required this.id,
     required this.text,
-    required this.section,
+    required this.startTime,
   });
 }

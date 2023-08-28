@@ -1,4 +1,4 @@
-import 'package:histouric_mobile_frontend/domain/domain.dart';
+import '../../domain/domain.dart';
 
 class BICRepositoryImpl implements BICRepository {
   final BICDatasource datasource;

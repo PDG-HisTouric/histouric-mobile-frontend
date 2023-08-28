@@ -10,16 +10,16 @@ class NeuBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5EDE3), // Fondo suave sepia
+        color: const Color(0xFFF5EDE3),
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(
-            color: Color(0xFFC0A080), // Sombra oscura sepia
+            color: Color(0xFFC0A080),
             blurRadius: 20,
             offset: Offset(10, 10),
           ),
           BoxShadow(
-            color: Color(0xFFECE1D3), // Sombra clara sepia
+            color: Color(0xFFECE1D3),
             blurRadius: 15,
             offset: Offset(-5, -5),
           ),
