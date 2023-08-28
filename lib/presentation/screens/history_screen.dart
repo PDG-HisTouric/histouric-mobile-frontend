@@ -284,7 +284,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: const CustomBottomNavigation(),
       ),
     );
   }

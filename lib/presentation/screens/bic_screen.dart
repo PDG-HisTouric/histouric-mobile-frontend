@@ -48,7 +48,6 @@ class _BICScreenState extends ConsumerState<BICScreen> {
             ))
           ],
         ),
-        bottomNavigationBar: const CustomBottomNavigation(),
       ),
     );
   }
