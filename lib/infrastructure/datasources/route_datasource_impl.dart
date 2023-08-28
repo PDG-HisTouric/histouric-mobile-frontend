@@ -1,4 +1,7 @@
-import '../../domain/domain.dart';
+import 'package:histouric_mobile_frontend/domain/entities/route.dart';
+
+import '../../domain/datasources/datasources.dart';
+import '../../domain/entities/entities.dart';
 
 final List<BICHistory> histories = [
   BICHistory(
@@ -34,7 +37,7 @@ final List<BIC> bics = [
     latitude: 3.4578385679577623,
     longitude: -76.53064306373778,
     description:
-    "La iglesia La Ermita es un templo católico ubicada en Santiago de Cali, Colombia. Originalmente fue una construcción pajiza de comienzos del siglo XVII, establecida en las cercanías del río Cali y dedicada a Nuestra Señora de la Soledad y al Señor de la Caña.",
+        "La iglesia La Ermita es un templo católico ubicada en Santiago de Cali, Colombia. Originalmente fue una construcción pajiza de comienzos del siglo XVII, establecida en las cercanías del río Cali y dedicada a Nuestra Señora de la Soledad y al Señor de la Caña.",
     exists: true,
     nicknames: ["Iglesia La Ermita"],
     images: [
@@ -63,7 +66,7 @@ final List<BIC> bics = [
     latitude: 3.451929471542798,
     longitude: -76.5319398863662,
     description:
-    "El Edificio Otero es un edificio localizado en la ciudad de Cali, Valle del Cauca. Está catalogado como monumento nacional",
+        "El Edificio Otero es un edificio localizado en la ciudad de Cali, Valle del Cauca. Está catalogado como monumento nacional",
     exists: true,
     nicknames: ["Edificio Otero"],
     images: [
@@ -78,7 +81,7 @@ final List<BIC> bics = [
     latitude: 3.4505256236841015,
     longitude: -76.53364473071245,
     description:
-    "La iglesia de San Francisco es un templo de la comunidad franciscana ubicado en Santiago de Cali (Colombia). Fue construido entre los siglos XVIII y XIX, y actualmente se encuentra en el centro de la ciudad. Hace parte del Complejo Religioso de San Francisco, que también incluye el convento de San Joaquín, la capilla de la Inmaculada, la Torre Mudéjar y un museo de arte religioso.",
+        "La iglesia de San Francisco es un templo de la comunidad franciscana ubicado en Santiago de Cali (Colombia). Fue construido entre los siglos XVIII y XIX, y actualmente se encuentra en el centro de la ciudad. Hace parte del Complejo Religioso de San Francisco, que también incluye el convento de San Joaquín, la capilla de la Inmaculada, la Torre Mudéjar y un museo de arte religioso.",
     exists: true,
     nicknames: ["BIC 4", "BIC 4"],
     images: [
@@ -89,14 +92,16 @@ final List<BIC> bics = [
   ),
 ];
 
-class BICDatasourceImpl implements BICDatasource {
+class RouteDatasourceImpl implements RouteDataSource {
   @override
-  Future<List<BIC>> getBICs() {
-    return Future.value(bics);
-  }
-
-  @override
-  Future<BIC> getBICById(String bicId) {
-    return Future.value(bics[int.parse(bicId) - 1]);
+  Future<Route> getRouteById(String routeId) {
+    return Future.delayed(
+      const Duration(seconds: 1),
+      () => Route(
+        name: 'Ruta del terremoto',
+        bics: bics,
+        id: '1',
+      ),
+    );
   }
 }
