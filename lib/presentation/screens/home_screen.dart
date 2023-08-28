@@ -11,7 +11,10 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: [
-            CustomGoogleMap(initialLat: 3.341571, initialLng: -76.530198),
+            CustomGoogleMap(
+              initialLat: 3.451929471542798,
+              initialLng: -76.5319398863662,
+            ),
           ],
         ),
         bottomNavigationBar: CustomBottomNavigation(),
