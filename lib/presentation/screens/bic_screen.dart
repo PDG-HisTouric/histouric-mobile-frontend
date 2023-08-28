@@ -202,7 +202,7 @@ class _TitleAndDescription extends StatelessWidget {
 }
 
 class _HistoryCard extends StatelessWidget {
-  final HistoryBIC historyBIC;
+  final BICHistory historyBIC;
 
   const _HistoryCard({
     required this.historyBIC,

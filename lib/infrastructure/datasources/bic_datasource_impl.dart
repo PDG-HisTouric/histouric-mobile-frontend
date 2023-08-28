@@ -1,25 +1,25 @@
 import '../../domain/domain.dart';
 
-final List<HistoryBIC> histories = [
-  HistoryBIC(
+final List<BICHistory> histories = [
+  BICHistory(
     historyId: "1",
     title: "Historia 1",
     description: "Descripción 1 de la historia 1",
     image: "https://picsum.photos/200",
   ),
-  HistoryBIC(
+  BICHistory(
     historyId: "2",
     title: "Historia 2",
     description: "Descripción 2 de la historia 2",
     image: "https://picsum.photos/201",
   ),
-  HistoryBIC(
+  BICHistory(
     historyId: "3",
     title: "Historia 3",
     description: "Descripción 3 de la historia 3",
     image: "https://picsum.photos/202",
   ),
-  HistoryBIC(
+  BICHistory(
     historyId: "4",
     title: "Historia 4",
     description: "Descripción 4 de la historia 4",
@@ -88,7 +88,7 @@ final List<BIC> bics = [
   ),
 ];
 
-class SpringBootBICDatasource implements BICDatasource {
+class BICDatasourceImpl implements BICDatasource {
   @override
   Future<List<BIC>> getBICs() {
     return Future.value(bics);

@@ -10,7 +10,7 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) => const HomeScreen(),
+      builder: (_, __) => HomeScreen(),
     ),
     GoRoute(
       path: '/$bicScreenPath/:bicId',
