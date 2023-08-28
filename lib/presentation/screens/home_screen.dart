@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
             CustomGoogleMap(initialLat: 3.341571, initialLng: -76.530198),
           ],
         ),
+        bottomNavigationBar: CustomBottomNavigation(),
       ),
     );
   }

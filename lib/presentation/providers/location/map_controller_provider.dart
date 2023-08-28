@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:histouric_mobile_frontend/domain/domain.dart';
 
 import '../../../config/config.dart';
-import '../bic/bic_repository_provider.dart';
+import '../../../domain/domain.dart';
+import '../repositories/bic_repository_provider.dart';
 
 class MapState {
   final bool areMarkersReady;

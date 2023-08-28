@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/entities/entities.dart';
-import 'bic_repository_provider.dart';
+import '../repositories/bic_repository_provider.dart';
 
 typedef GetBICCallback = Future<BIC> Function(String bic);
 

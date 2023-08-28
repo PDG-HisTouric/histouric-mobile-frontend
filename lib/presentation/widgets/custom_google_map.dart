@@ -27,10 +27,7 @@ class __MapViewState extends ConsumerState<CustomGoogleMap> {
       markers: mapController.markersSet,
       mapType: MapType.normal,
       initialCameraPosition: CameraPosition(
-        target: LatLng(
-          widget.initialLat,
-          widget.initialLng,
-        ),
+        target: LatLng(widget.initialLat, widget.initialLng),
         zoom: 18,
       ),
       myLocationEnabled: true,
