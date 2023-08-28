@@ -1,4 +1,4 @@
-import 'package:histouric_mobile_frontend/domain/entities/route.dart';
+import 'package:histouric_mobile_frontend/domain/entities/histouric_route.dart';
 
 import '../../domain/datasources/datasources.dart';
 import '../../domain/entities/entities.dart';
@@ -94,10 +94,10 @@ final List<BIC> bics = [
 
 class RouteDatasourceImpl implements RouteDataSource {
   @override
-  Future<Route> getRouteById(String routeId) {
+  Future<HistouricRoute> getRouteById(String routeId) {
     return Future.delayed(
       const Duration(seconds: 1),
-      () => Route(
+      () => HistouricRoute(
         name: 'Ruta del terremoto',
         bics: bics,
         id: '1',

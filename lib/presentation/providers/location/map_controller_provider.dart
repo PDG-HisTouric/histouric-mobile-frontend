@@ -8,13 +8,11 @@ import '../../../domain/domain.dart';
 import '../repositories/bic_repository_provider.dart';
 
 class MapState {
-  final bool areMarkersReady;
   final bool isControllerReady;
   final List<Marker> markers;
   final GoogleMapController? controller;
 
   MapState({
-    this.areMarkersReady = false,
     this.markers = const [],
     this.isControllerReady = false,
     this.controller,
@@ -25,13 +23,11 @@ class MapState {
   }
 
   MapState copyWith({
-    bool? areMarkersReady,
     List<Marker>? markers,
     bool? isControllerReady,
     GoogleMapController? controller,
   }) {
     return MapState(
-      areMarkersReady: areMarkersReady ?? this.areMarkersReady,
       markers: markers ?? this.markers,
       isControllerReady: isControllerReady ?? this.isControllerReady,
       controller: controller ?? this.controller,
@@ -46,11 +42,24 @@ class MapNotifier extends StateNotifier<MapState> {
   MapNotifier({
     required this.bicRepository,
     required this.context,
-  }) : super(MapState()) {
-    _loadBICs();
+  }) : super(MapState());
+
+  void setMarkers(List<BIC> bics) async {
+    for (var bic in bics) {
+      addMarker(
+        latitude: bic.latitude,
+        longitude: bic.longitude,
+        name: bic.name,
+        snippet: bic.description,
+        bicId: bic.bicId,
+      );
+    }
+    while (state.markers.length != bics.length) {
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
   }
 
-  void _loadBICs() async {
+  void loadBICsFromBICRepository() async {
     final bics = await bicRepository.getBICs();
     for (var bic in bics) {
       addMarker(
@@ -64,7 +73,6 @@ class MapNotifier extends StateNotifier<MapState> {
     while (state.markers.length != bics.length) {
       await Future.delayed(const Duration(milliseconds: 50));
     }
-    state = state.copyWith(areMarkersReady: true);
   }
 
   void setMapController(GoogleMapController controller) {

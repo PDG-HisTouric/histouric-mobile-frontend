@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../config/config.dart';
 import '../../domain/entities/entities.dart';
 import '../providers/providers.dart';
-import '../widgets/widgets.dart';
 
 class BICScreen extends ConsumerStatefulWidget {
   final String bicId;
