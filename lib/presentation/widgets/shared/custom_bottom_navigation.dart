@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CustomBottomNavigation extends StatelessWidget {
+import '../../providers/providers.dart';
+
+class CustomBottomNavigation extends ConsumerWidget {
   const CustomBottomNavigation({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
+    final bottomNavigationBarIndex =
+        ref.watch(bottomNavigationBarIndexProvider);
 
     return BottomNavigationBar(
       selectedItemColor: colors.primary,
-      currentIndex: 1,
+      currentIndex: bottomNavigationBarIndex,
+      onTap: (index) {
+        ref.read(bottomNavigationBarIndexProvider.notifier).state = index;
+      },
       backgroundColor: colors.surface,
       items: const [
         BottomNavigationBarItem(

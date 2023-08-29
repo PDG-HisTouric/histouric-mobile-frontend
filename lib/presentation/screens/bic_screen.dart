@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../config/config.dart';
 import '../../domain/entities/entities.dart';
 import '../providers/providers.dart';
-import '../widgets/widgets.dart';
 
 class BICScreen extends ConsumerStatefulWidget {
   final String bicId;
@@ -48,7 +47,6 @@ class _BICScreenState extends ConsumerState<BICScreen> {
             ))
           ],
         ),
-        bottomNavigationBar: const CustomBottomNavigation(),
       ),
     );
   }
@@ -202,7 +200,7 @@ class _TitleAndDescription extends StatelessWidget {
 }
 
 class _HistoryCard extends StatelessWidget {
-  final HistoryBIC historyBIC;
+  final BICHistory historyBIC;
 
   const _HistoryCard({
     required this.historyBIC,

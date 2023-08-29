@@ -4,13 +4,14 @@ import '../../presentation/presentation.dart';
 
 const String bicScreenPath = 'bic';
 const String historyScreenPath = 'history';
+const String routeScreenPath = 'route';
 
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
-      builder: (_, __) => const HomeScreen(),
+      builder: (_, __) => HomeScreen(),
     ),
     GoRoute(
       path: '/$bicScreenPath/:bicId',
@@ -24,6 +25,13 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final historyId = state.pathParameters['historyId'] ?? 'no-id';
         return HistoryScreen(historyId: historyId);
+      },
+    ),
+    GoRoute(
+      path: '/$routeScreenPath/:routeId',
+      builder: (context, state) {
+        final routeId = state.pathParameters['routeId'] ?? 'no-id';
+        return RouteScreen(routeId: routeId);
       },
     ),
   ],
