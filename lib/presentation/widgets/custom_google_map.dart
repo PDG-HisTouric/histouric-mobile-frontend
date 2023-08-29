@@ -78,16 +78,20 @@ class __MapViewState extends ConsumerState<CustomGoogleMap> {
   _getPolyline() async {
     try {
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        Environment.directionsApiKey,
-        PointLatLng(widget.bics![0].latitude, widget.bics![0].longitude),
-        PointLatLng(widget.bics![1].latitude, widget.bics![1].longitude),
-        travelMode: TravelMode.driving,
-        // wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")],
-      );
+          Environment.directionsApiKey,
+          PointLatLng(widget.bics![0].latitude, widget.bics![0].longitude),
+          PointLatLng(widget.bics![widget.bics!.length - 1].latitude,
+              widget.bics![widget.bics!.length - 1].longitude),
+          travelMode: TravelMode.walking,
+          wayPoints: widget.bics!
+              .sublist(1, widget.bics!.length - 1)
+              .map((e) => PolylineWayPoint(
+                  location: "${e.latitude},${e.longitude}", stopOver: true))
+              .toList());
       if (result.points.isNotEmpty) {
-        result.points.forEach((PointLatLng point) {
+        for (var point in result.points) {
           polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        });
+        }
       }
       _addPolyLine();
     } catch (e) {

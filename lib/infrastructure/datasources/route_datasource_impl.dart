@@ -49,19 +49,6 @@ final List<BIC> bics = [
   ),
   BIC(
     bicId: "2",
-    name: "Antiguo Matadero de Calí",
-    latitude: 3.4415465517324257,
-    longitude: -76.52977456110938,
-    description: "Antiguo Matadero de Calí",
-    exists: false,
-    nicknames: ["El Matadero"],
-    images: [
-      'https://audiovisuales.icesi.edu.co/audiovisuales/retrieve/210777/Fdo%20009948.jpg.preview.jpg',
-    ],
-    histories: histories,
-  ),
-  BIC(
-    bicId: "3",
     name: "Edificio Otero",
     latitude: 3.451929471542798,
     longitude: -76.5319398863662,
@@ -76,7 +63,7 @@ final List<BIC> bics = [
     histories: histories,
   ),
   BIC(
-    bicId: "4",
+    bicId: "3",
     name: "Complejo religioso de San Francisco",
     latitude: 3.4505256236841015,
     longitude: -76.53364473071245,
@@ -87,6 +74,19 @@ final List<BIC> bics = [
     images: [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Aleko_Plaza_de_San_Francisco.jpg/420px-Aleko_Plaza_de_San_Francisco.jpg',
       'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/1b/1a/a2/iglesia-san-francisco.jpg?w=1200&h=1200&s=1',
+    ],
+    histories: histories,
+  ),
+  BIC(
+    bicId: "4",
+    name: "Antiguo Matadero de Calí",
+    latitude: 3.4415465517324257,
+    longitude: -76.52977456110938,
+    description: "Antiguo Matadero de Calí",
+    exists: false,
+    nicknames: ["El Matadero"],
+    images: [
+      'https://audiovisuales.icesi.edu.co/audiovisuales/retrieve/210777/Fdo%20009948.jpg.preview.jpg',
     ],
     histories: histories,
   ),
