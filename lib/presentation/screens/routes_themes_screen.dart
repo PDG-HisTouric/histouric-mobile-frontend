@@ -45,29 +45,30 @@ class _RouteThemeScreenState extends ConsumerState<RoutesThemesScreen> {
               spacing: 10,
               runSpacing: 10,
               children: routesThemes
-                  .map((routeTheme) => GestureDetector(
-                        onTap: () {
-                          context
-                              .push('/$routeThemeScreenPath/${routeTheme.id}');
-                        },
-                        child: GeneralCard(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 150,
-                              height: 150,
-                              child: Center(
-                                child: Text(
-                                  textAlign: TextAlign.center,
-                                  routeTheme.name,
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
+                  .map(
+                    (routeTheme) => GestureDetector(
+                      onTap: () {
+                        context.push('/$routeThemeScreenPath/${routeTheme.id}');
+                      },
+                      child: GeneralCard(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 150,
+                            height: 150,
+                            child: Center(
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                routeTheme.name,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ),
                           ),
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
           ),

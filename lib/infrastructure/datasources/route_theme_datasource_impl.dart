@@ -1,4 +1,4 @@
-import 'package:histouric_mobile_frontend/domain/entities/route_theme.dart';
+import 'package:histouric_mobile_frontend/domain/entities/routes_theme.dart';
 
 import '../../domain/datasources/datasources.dart';
 import '../../domain/entities/entities.dart';
@@ -33,7 +33,7 @@ final List<BICHistory> histories2 = [
 final List<BIC> bics2 = [
   BIC(
     bicId: "1",
-    name: "La ermita",
+    name: "La Ermita",
     latitude: 3.4578385679577623,
     longitude: -76.53064306373778,
     description:
@@ -98,63 +98,61 @@ final route = HistouricRoute(
   id: '1',
 );
 
+final routesThemes = [
+  RoutesTheme(
+    id: '1',
+    name: 'Desastres naturales',
+    routes: [route],
+  ),
+  RoutesTheme(
+    id: '2',
+    name: 'Arquitectura',
+    routes: [route],
+  ),
+  RoutesTheme(
+    id: '3',
+    name: 'Historia',
+    routes: [route],
+  ),
+  RoutesTheme(
+    id: '4',
+    name: 'Cultura',
+    routes: [route],
+  ),
+  RoutesTheme(
+    id: '5',
+    name: 'Arte',
+    routes: [route],
+  ),
+  RoutesTheme(
+    id: '6',
+    name: 'Deporte',
+    routes: [route],
+  ),
+  RoutesTheme(
+    id: '7',
+    name: 'Música',
+    routes: [route],
+  ),
+  RoutesTheme(
+    id: '8',
+    name: 'Gastronomía',
+    routes: [route],
+  ),
+];
+
 class RouteThemeDataSourceImpl implements RouteThemeDataSource {
   @override
-  Future<List<RouteTheme>> getRouteThemes() {
+  Future<List<RoutesTheme>> getRouteThemes() {
     return Future.delayed(
-        const Duration(seconds: 1),
-        () => [
-              RouteTheme(
-                id: '1',
-                name: 'Desastres naturales',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '2',
-                name: 'Arquitectura',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '3',
-                name: 'Historia',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '4',
-                name: 'Cultura',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '5',
-                name: 'Arte',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '6',
-                name: 'Deporte',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '7',
-                name: 'Música',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '8',
-                name: 'Gastronomía',
-                routes: [route],
-              ),
-              RouteTheme(
-                id: '9',
-                name: 'Festivales',
-                routes: [route],
-              ),
-            ]);
+      const Duration(seconds: 1),
+      () => routesThemes,
+    );
   }
 
   @override
-  Future<RouteTheme> getRouteThemeById(String id) {
-    // TODO: implement getRouteThemeById
-    throw UnimplementedError();
+  Future<RoutesTheme> getRouteThemeById(String id) {
+    return Future(
+        () => routesThemes.where((element) => element.id == id).first);
   }
 }

@@ -30,7 +30,7 @@ final List<BICHistory> histories = [
 final List<BIC> bics = [
   BIC(
     bicId: "1",
-    name: "La ermita",
+    name: "La Ermita",
     latitude: 3.4578385679577623,
     longitude: -76.53064306373778,
     description:
