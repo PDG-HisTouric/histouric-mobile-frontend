@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:histouric_mobile_frontend/config/helpers/dialogs.dart';
 import 'package:histouric_mobile_frontend/domain/domain.dart';
 
 import '../providers/providers.dart';
@@ -29,13 +30,11 @@ class _RouteScreenState extends ConsumerState<RouteScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    print("bics: ${route.bics.length}");
-
     return Scaffold(
       appBar: AppBar(
         title: Text(route.name),
       ),
-      body: CustomGoogleMap(
+      body: CustomGoogleMapWithRoute(
         initialLat: 3.451929471542798,
         initialLng: -76.5319398863662,
         bics: route.bics,

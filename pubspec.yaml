@@ -19,6 +19,8 @@ dependencies:
   percent_indicator: ^4.2.3
   audioplayers: ^5.1.0
   flutter_polyline_points: ^2.0.0
+  permission_handler: ^10.4.3
+  geolocator: ^10.0.0
 
 dev_dependencies:
   flutter_test:

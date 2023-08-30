@@ -11,11 +11,13 @@ class MapState {
   final bool isControllerReady;
   final List<Marker> markers;
   final GoogleMapController? controller;
+  final Map<PolylineId, Polyline> polylines;
 
   MapState({
     this.markers = const [],
     this.isControllerReady = false,
     this.controller,
+    this.polylines = const {},
   });
 
   Set<Marker> get markersSet {
@@ -26,11 +28,13 @@ class MapState {
     List<Marker>? markers,
     bool? isControllerReady,
     GoogleMapController? controller,
+    Map<PolylineId, Polyline>? polylines,
   }) {
     return MapState(
       markers: markers ?? this.markers,
       isControllerReady: isControllerReady ?? this.isControllerReady,
       controller: controller ?? this.controller,
+      polylines: polylines ?? this.polylines,
     );
   }
 }
@@ -75,6 +79,10 @@ class MapNotifier extends StateNotifier<MapState> {
     }
   }
 
+  void setPolylines(Map<PolylineId, Polyline> polylines) {
+    state = state.copyWith(polylines: polylines);
+  }
+
   void setMapController(GoogleMapController controller) {
     state = state.copyWith(controller: controller, isControllerReady: true);
   }
@@ -112,7 +120,7 @@ class MapNotifier extends StateNotifier<MapState> {
   }
 }
 
-final mapControllerProvider = StateNotifierProvider.autoDispose
+final mapProvider = StateNotifierProvider.autoDispose
     .family<MapNotifier, MapState, BuildContext>((ref, context) {
   final bicRepository = ref.watch(bicRepositoryProvider);
   return MapNotifier(bicRepository: bicRepository, context: context);
