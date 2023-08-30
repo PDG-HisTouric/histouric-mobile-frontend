@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../config/config.dart';
 import '../providers/providers.dart';
+import '../widgets/widgets.dart';
 
-class RouteThemeScreen extends ConsumerStatefulWidget {
-  const RouteThemeScreen({super.key});
+class RoutesThemesScreen extends ConsumerStatefulWidget {
+  const RoutesThemesScreen({super.key});
 
   @override
-  ConsumerState<RouteThemeScreen> createState() => _RouteThemeScreenState();
+  ConsumerState<RoutesThemesScreen> createState() => _RouteThemeScreenState();
 }
 
-class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
+class _RouteThemeScreenState extends ConsumerState<RoutesThemesScreen> {
   @override
   void initState() {
     super.initState();
@@ -29,20 +32,40 @@ class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Route Theme'),
+        title: const Text('Temáticas'),
       ),
-      body: Center(
-        child: ListView.builder(
-          itemCount: routesThemes!.length,
-          itemBuilder: (context, index) {
-            return Title(
-              color: Colors.black,
-              child: Text(
-                routesThemes[index].name,
-                style: const TextStyle(fontSize: 20),
-              ),
-            );
-          },
+      body: SingleChildScrollView(
+        child: Center(
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.center,
+            spacing: 10,
+            runSpacing: 10,
+            children: routesThemes
+                .map((routeTheme) => GestureDetector(
+                      onTap: () {
+                        context.push('/$routeThemeScreenPath/${routeTheme.id}');
+                      },
+                      child: GeneralCard(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 150,
+                            height: 150,
+                            child: Center(
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                routeTheme.name,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ),
         ),
       ),
     );

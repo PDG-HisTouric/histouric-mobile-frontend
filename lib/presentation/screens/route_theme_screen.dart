@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:histouric_mobile_frontend/config/config.dart';
 
-class RoutesTempScreen extends StatelessWidget {
-  const RoutesTempScreen({super.key});
+import '../widgets/widgets.dart';
+
+class RouteThemeScreen extends StatelessWidget {
+  final String routeThemeId;
+  const RouteThemeScreen({super.key, required this.routeThemeId});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class RoutesTempScreen extends StatelessWidget {
               onTap: () {
                 context.push('/$routeScreenPath/1');
               },
-              child: _GeneralCard(
+              child: GeneralCard(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
@@ -33,23 +36,6 @@ class RoutesTempScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _GeneralCard extends StatelessWidget {
-  final Widget child;
-
-  const _GeneralCard({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5, // Altura de la sombra
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0), // Radio de borde redondeado
-      ),
-      child: child,
     );
   }
 }

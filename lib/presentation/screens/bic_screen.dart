@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../config/config.dart';
 import '../../domain/entities/entities.dart';
 import '../providers/providers.dart';
+import '../widgets/widgets.dart';
 
 class BICScreen extends ConsumerStatefulWidget {
   final String bicId;
@@ -179,7 +180,7 @@ class _TitleAndDescription extends StatelessWidget {
             ),
           ),
         ),
-        _GeneralCard(
+        GeneralCard(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
@@ -218,7 +219,7 @@ class _HistoryCard extends StatelessWidget {
       child: FadeIn(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: _GeneralCard(
+          child: GeneralCard(
             child: Row(
               children: [
                 SizedBox(
@@ -300,23 +301,6 @@ class _Histories extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _GeneralCard extends StatelessWidget {
-  final Widget child;
-
-  const _GeneralCard({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5, // Altura de la sombra
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0), // Radio de borde redondeado
-      ),
-      child: child,
     );
   }
 }

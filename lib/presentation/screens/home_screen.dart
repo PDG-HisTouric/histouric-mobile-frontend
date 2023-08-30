@@ -14,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
       initialLat: 3.451929471542798,
       initialLng: -76.5319398863662,
     ),
-    const RouteThemeScreen(),
+    const RoutesThemesScreen(),
   ];
 
   @override
