@@ -4,6 +4,7 @@ import '../../presentation/presentation.dart';
 
 const String bicScreenPath = 'bic';
 const String historyScreenPath = 'history';
+const String routeThemeScreenPath = 'route-theme';
 const String routeScreenPath = 'route';
 
 final appRouter = GoRouter(
@@ -25,6 +26,13 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final historyId = state.pathParameters['historyId'] ?? 'no-id';
         return HistoryScreen(historyId: historyId);
+      },
+    ),
+    GoRoute(
+      path: '/$routeThemeScreenPath/:routeThemeId',
+      builder: (context, state) {
+        final routeThemeId = state.pathParameters['routeThemeId'] ?? 'no-id';
+        return RouteThemeScreen(routeThemeId: routeThemeId);
       },
     ),
     GoRoute(

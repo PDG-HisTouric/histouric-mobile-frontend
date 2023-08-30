@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:histouric_mobile_frontend/presentation/widgets/widgets.dart';
-
-import '../providers/providers.dart';
-import 'routes_temp_screen.dart';
+import 'package:histouric_mobile_frontend/presentation/presentation.dart';
 
 class HomeScreen extends ConsumerWidget {
   HomeScreen({super.key});
@@ -17,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
       initialLat: 3.451929471542798,
       initialLng: -76.5319398863662,
     ),
-    const RoutesTempScreen(),
+    const RoutesThemesScreen(),
   ];
 
   @override
