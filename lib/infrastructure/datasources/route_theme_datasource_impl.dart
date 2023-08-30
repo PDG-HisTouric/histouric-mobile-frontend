@@ -1,9 +1,9 @@
-import 'package:histouric_mobile_frontend/domain/entities/histouric_route.dart';
+import 'package:histouric_mobile_frontend/domain/entities/route_theme.dart';
 
 import '../../domain/datasources/datasources.dart';
 import '../../domain/entities/entities.dart';
 
-final List<BICHistory> histories1 = [
+final List<BICHistory> histories2 = [
   BICHistory(
     historyId: "1",
     title: "Historia 1",
@@ -30,7 +30,7 @@ final List<BICHistory> histories1 = [
   ),
 ];
 
-final List<BIC> bics1 = [
+final List<BIC> bics2 = [
   BIC(
     bicId: "1",
     name: "La ermita",
@@ -45,7 +45,7 @@ final List<BIC> bics1 = [
       'https://images.mnstatic.com/a9/f3/a9f36d28a6458cdc67726fd09ea08674.jpg',
       'https://www.elpais.com.co/resizer/WtXtPEaGFNQoo2BSOPV18x5AKUA=/arc-anglerfish-arc2-prod-semana/public/6HIDALNZSVGVNNVOWZFUJ6LZBA.jpg',
     ],
-    histories: histories1,
+    histories: histories2,
   ),
   BIC(
     bicId: "2",
@@ -60,7 +60,7 @@ final List<BIC> bics1 = [
       'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1d/8e/c6/0a/edificio-otero-ubicado.jpg?w=1200&h=-1&s=1',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Otero_konstrua%C4%B5o_WLM_2013_05.JPG/675px-Otero_konstrua%C4%B5o_WLM_2013_05.JPG',
     ],
-    histories: histories1,
+    histories: histories2,
   ),
   BIC(
     bicId: "3",
@@ -75,7 +75,7 @@ final List<BIC> bics1 = [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Aleko_Plaza_de_San_Francisco.jpg/420px-Aleko_Plaza_de_San_Francisco.jpg',
       'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/1b/1a/a2/iglesia-san-francisco.jpg?w=1200&h=1200&s=1',
     ],
-    histories: histories1,
+    histories: histories2,
   ),
   BIC(
     bicId: "4",
@@ -88,20 +88,73 @@ final List<BIC> bics1 = [
     images: [
       'https://audiovisuales.icesi.edu.co/audiovisuales/retrieve/210777/Fdo%20009948.jpg.preview.jpg',
     ],
-    histories: histories1,
+    histories: histories2,
   ),
 ];
 
-class RouteDatasourceImpl implements RouteDataSource {
+final route = HistouricRoute(
+  name: 'Ruta del terremoto',
+  bics: bics2,
+  id: '1',
+);
+
+class RouteThemeDataSourceImpl implements RouteThemeDataSource {
   @override
-  Future<HistouricRoute> getRouteById(String routeId) {
+  Future<List<RouteTheme>> getRouteThemes() {
     return Future.delayed(
-      const Duration(seconds: 1),
-      () => HistouricRoute(
-        name: 'Ruta del terremoto',
-        bics: bics1,
-        id: '1',
-      ),
-    );
+        const Duration(seconds: 1),
+        () => [
+              RouteTheme(
+                id: '1',
+                name: 'Desastres naturales',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '2',
+                name: 'Arquitectura',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '3',
+                name: 'Historia',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '4',
+                name: 'Cultura',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '5',
+                name: 'Arte',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '6',
+                name: 'Deporte',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '7',
+                name: 'Música',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '8',
+                name: 'Gastronomía',
+                routes: [route],
+              ),
+              RouteTheme(
+                id: '9',
+                name: 'Festivales',
+                routes: [route],
+              ),
+            ]);
+  }
+
+  @override
+  Future<RouteTheme> getRouteThemeById(String id) {
+    // TODO: implement getRouteThemeById
+    throw UnimplementedError();
   }
 }
