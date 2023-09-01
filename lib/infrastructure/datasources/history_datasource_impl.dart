@@ -79,4 +79,119 @@ class HistoryDataSourceImpl extends HistoryDataSource {
       images: images,
     ));
   }
+
+  @override
+  Future<History> getHistory(String historyId) {
+    List<HistouricImage> images = [];
+    List<BIC> bics = [];
+
+    images.add(HistouricImage(
+      id: '1',
+      imageUrl:
+          'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgkGUf5dm_XtQk5m8uQeDmrGu5ijihwMMP20zmgAjrCnEogMkdm0R4jB2y45WJv4PgTVhbE7im9_7U32wOt5qYaOHpbuT4uSuePEO_Z6I6tDFkF1ZfqKe-gB0OAs8jX7sKkD3CCuPCE7Rr5LuaEkJz7mvRPxtAVbuOeOUsm7HK0St9fhr92zIbjEqnFYEjE/s1501/13.%20Por%20obra%20y%20gracia%20de%20Micaela%20%282%29.jpg',
+      section: '1',
+    ));
+
+    List<HistouricText> texts = [];
+
+    texts.add(HistouricText(
+      id: '1',
+      text:
+          'El terremoto del 7 de junio de 1925 la dejó reducida a una pila de tierra y hojas de palma. “Se acabó la Ermita”, decía la gente ante la evidencia del desastre, sin saber que este solo sería la “excusa” para construir un ícono de la ciudad. Micaela Castro Borrero no iba a permitir su fin, por eso había rescatado de los escombros lo que milagrosamente se salvó: el lienzo del Señor de la Caña y la estatua de Nuestra Señora de la Soledad del Rio, dos imágenes que siempre han acompañado al templo.',
+      startTime: 0,
+    ));
+
+    texts.add(HistouricText(
+      id: '2',
+      text:
+          'La primera Ermita se construyó alrededor de 1590 con el fin de poner a la Virgen como custodia de la ciudad ante los frecuentes desbordamientos del río Cali. Se ubicó, como su nombre lo indica, alejada de todo, junto al rio, a varios metros de su localización actual.\n\nPero a pesar de los rezos y las encomiendas, el problema de los desbordamientos del río no se solucionó. Y cada vez que decidía salirse de su cauce, la Ermita sufría las consecuencias.',
+      startTime: 29,
+    ));
+
+    texts.add(HistouricText(
+      id: '3',
+      text:
+          'Para 1678 la capilla ya se había ganado un lugar en el corazón de los caleños, se decidió entonces protegerla trasladándola de sitio... y de paso, aprovechar para remozarla. Si bien esta segunda versión fue mejor, su aspecto no tenía nada que ver con la iglesia actual, era una capilla sencilla, de bahareque y techo de palma, muy básica ¡Ese fue el templo que destruyó el terremoto!',
+      startTime: 56,
+    ));
+
+    texts.add(HistouricText(
+      id: '4',
+      text:
+          'Mover el templo tampoco resolvió el problema, si el río se salía, la capilla se inundaba. Fue por esto que en 1741, aprovechando la presencia de un emisario del rey Felipe V, se aprobó desviar ligeramente su cauce, lo necesario para garantizar la conservación de la capilla. Por esta decisión, diez años después, el río Cali tomaría en ese sector su trayecto actual y se formaría la gran zona verde que hoy ocupa el parque Uribe Uribe ¡La Ermita quedó así a salvo de las inundaciones!',
+      startTime: 78,
+    ));
+
+    texts.add(HistouricText(
+      id: '5',
+      text:
+          'La construcción de la actual Ermita empezó en 1930 y estuvo a cargo de Pablo Emilio Páez, un ingeniero del Ferrocarril del Pacífico.\n\n—Ni usted me pregunta cuánto tengo en caja para esta obra ni yo le pregunto cuánto va a costar―, fue la condición de Micaela al empezar la obra.\n\nEs que la señora solo tenía trescientos pesos y la obra valía muchísimo más. Ella lo sabía, pero se sentía capaz de conseguir los fondos.',
+      startTime: 108,
+    ));
+
+    texts.add(HistouricText(
+      id: '6',
+      text:
+          'Su primer reto fue convencer a la Iglesia. Monseñor Heladio Perlaza, el primer obispo que tuvo la Diócesis de Cali, no estaba muy convencido de que el proyecto fuera factible ―trescientos pesos no compraban ni el hierro―, pero aceptó al verse “arrollado” por la convicción de Micaela.\n\nUna vez conseguido el permiso, ella se reunió con Alfredo Vásquez Cobo, el administrador del Ferrocarril del Pacífico, y consiguió que aportara al diseñador de la obra, el ingeniero Páez.',
+      startTime: 133,
+    ));
+
+    texts.add(HistouricText(
+      id: '7',
+      text:
+          'Con el diseño en mano, Micaela empezó el recaudo de fondos. Y se organizó de modo que no se le escapara nadie. Su “libro de oro de los cooperadores”, donde registraba cuidadosamente quién ya había aportado y cuánto, causaba terror entre algunos, pues ella no tenía ningún empacho en acercarse de frente y decir “usted no figura en mi libro, con cuánto me va a colaborar”.',
+      startTime: 157,
+    ));
+
+    texts.add(HistouricText(
+      id: '8',
+      text:
+          'Alfonso Caicedo Roa, una de las billeteras más robustas de la Cali de esa época, fue una de sus “victimas” más notables, respondió a las demandas de Micaela con generosidad: aportó hierro “todo el que haga falta” y dinero para poner al día el pago de la mano de obra. Eran los primeros días de la Segunda Guerra Mundial y por efecto de ella el hierro era escaso y muy costoso.',
+      startTime: 178,
+    ));
+
+    texts.add(HistouricText(
+      id: '9',
+      text:
+          'Pero hubo también aportes anónimos. El más llamativo ocurrió justo al final de la obra, cuando solo hacía falta el altar.\n\n―Hay que traerlo de Italia y cuesta diez mil pesos, había dicho el ingeniero.\n\nY la preocupación de Micaela fue enorme, al cuaderno ya no le cabían más nombres y las arcas estaban vacías. Recibió entonces un mensaje del director del banco,\n\n―el ganador de la lotería me ha encargado decirle que hizo una promesa y que para honrarla le envía este aporte para la Ermita― Eran diez mil pesos.',
+      startTime: 198,
+    ));
+
+    texts.add(HistouricText(
+      id: '10',
+      text:
+          'Desde antes de su inauguración, su tardío estilo neogótico, muy de moda en la Europa de mediados del siglo XVIII, pero inimaginable para la primera mitad del siglo XX, generó gran expectativa. Todo el mundo estaba atento a su evolución. “Es una réplica en pequeña escala de una catedral alemana”, se decía.',
+      startTime: 227,
+    ));
+
+    texts.add(HistouricText(
+      id: '11',
+      text:
+          'La expectativa creció cuando la edificación tuvo forma y aumentó con la llegada de los detalles: el juego de seis campanas construido en París; el reloj de la torre; los vitrales, el de los doce apóstoles –incluido Pablo, excluido Judas–, para el frente del atrio, y el del Jesús crucificado, para el campanario.',
+      startTime: 244,
+    ));
+
+    texts.add(HistouricText(
+      id: '12',
+      text:
+          'La Ermita se reinauguró el 25 de noviembre de 1942 y durante tres décadas formó parte de las mejores postales de la ciudad; junto con el Hotel Alférez Real, el teatro Jorge Isaacs, el edificio de la Colombiana de Tabaco y el puente Ortiz formaron la zona rosa. Todo lo elegante, todo lo importante, sucedía ahí.',
+      startTime: 261,
+    ));
+
+    texts.add(HistouricText(
+      id: '13',
+      text:
+          'A fines de los sesenta el uso del suelo cambió, el comercio se adueñó del espacio, la zona perdió su elegancia, se llenó de paraderos de buses; el Alférez Real fue demolido, ahí se construyó el parque de los Poetas, a la larga un refugio de indigentes y atracadores. Solo la construcción del boulevard del río en 2012 le dio un nuevo aire al sector, la iglesia volvió a ser un sitio obligado para los turistas, una fotografía que no puede faltar. Pero aún el sector es frágil.\n\nMicaela murió el 8 de junio de 1964 dejándonos un enorme legado. Pero ni la muerte la apartó de la Ermita ¡Ahí, al fondo a la izquierda, reposan sus restos!',
+      startTime: 283,
+    ));
+
+    return Future.value(History(
+      id: '2',
+      title: 'Por obra y gracia de Micaela',
+      audioUrl:
+          'https://drive.google.com/file/d/1ZdWv52KLT5SSkjrLMIfptrFw57-6HBC2/view',
+      texts: texts,
+      images: images,
+    ));
+  }
 }

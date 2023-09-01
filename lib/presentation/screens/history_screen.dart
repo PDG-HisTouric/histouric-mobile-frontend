@@ -31,8 +31,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-    _initAudioPlayer();
     ref.read(historyInfoProvider.notifier).loadHistory(widget.historyId);
+    _initAudioPlayer();
   }
 
   @override
@@ -43,7 +43,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
   Future<void> _initAudioPlayer() async {
     _audioPlayer = AudioPlayer();
-    _assetSource = AssetSource('audios/01ElTerremotoDe1925.mp3');
+    _assetSource = AssetSource('audios/13PorObraYGraciaDeMicaela.mp3');
     _audioPlayer.onDurationChanged.listen((event) {
       setState(() {
         _duration = event;
@@ -111,7 +111,13 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(history.title)),
+        appBar: AppBar(
+          title: Text(
+            history.title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: const Color(0xFFE7C18B),
+        ),
         body: Stack(
           children: [
             Container(
@@ -126,7 +132,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 16),
                   SizedBox(
                     height: 200,
                     child: PageView.builder(
@@ -134,29 +139,32 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Image.network(
-                            history.images[index].imageUrl,
-                            fit: BoxFit.cover,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image.network(
+                              history.images[index].imageUrl,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
                   const SizedBox(height: 16),
-                  if (currentHistoryText != null)
-                    FadeIn(
-                      duration: const Duration(milliseconds: 600),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: NeuBox(
-                          child: Text(
-                            currentHistoryText!.text,
-                            style: const TextStyle(fontSize: 16),
-                            textAlign: TextAlign.justify,
-                          ),
+                  FadeIn(
+                    duration: const Duration(milliseconds: 700),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: NeuBox(
+                        child: Text(
+                          currentHistoryText?.text ??
+                              'Presiona play para escuchar la historia',
+                          style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.justify,
                         ),
                       ),
                     ),
+                  ),
                   const SizedBox(height: 200),
                 ],
               ),
@@ -186,7 +194,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                   children: [
                     const SizedBox(height: 16),
                     const Text(
-                      'Reproducir',
+                      'Escucha la historia',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
