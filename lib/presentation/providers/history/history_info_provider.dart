@@ -5,7 +5,7 @@ import '../repositories/history_repository_provider.dart';
 
 final historyInfoProvider =
     StateNotifierProvider<HistoryMapNotifier, Map<String, History>>((ref) {
-  final getHistory = ref.watch(historyRepositoryProvider).getHistoryById;
+  final getHistory = ref.watch(historyRepositoryProvider).getHistory;
   return HistoryMapNotifier(getHistory: getHistory);
 });
 
