@@ -1,7 +1,10 @@
 export 'bic.dart';
-export 'history.dart';
 export 'bic_history.dart';
-export 'image.dart';
-export 'text.dart';
+export 'history_image.dart';
+export 'history_text.dart';
 export 'histouric_route.dart';
-export 'routes_theme.dart';
+export 'route_theme.dart';
+export 'history_video.dart';
+export 'history_audio.dart';
+export 'story.dart';
+export 'histouric_user.dart';

@@ -24,9 +24,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
 
-  History? history;
+  Story? history;
 
-  HistouricText? currentHistoryText;
+  HistoryText? currentHistoryText;
 
   @override
   void initState() {
@@ -78,7 +78,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   void updateCurrentTextSegment(Duration position) {
-    HistouricText? newHistoryText;
+    HistoryText? newHistoryText;
 
     for (var historyText in history!.texts) {
       if (position >= Duration(seconds: historyText.startTime)) {
@@ -135,14 +135,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                   SizedBox(
                     height: 200,
                     child: PageView.builder(
-                      itemCount: history.images.length,
+                      itemCount: history.images?.length ?? 0,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30),
                             child: Image.network(
-                              history.images[index].imageUrl,
+                              history.images![index].imageUri,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -157,7 +157,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: NeuBox(
                         child: Text(
-                          currentHistoryText?.text ??
+                          currentHistoryText?.content ??
                               'Presiona play para escuchar la historia',
                           style: const TextStyle(fontSize: 16),
                           textAlign: TextAlign.justify,

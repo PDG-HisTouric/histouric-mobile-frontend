@@ -4,9 +4,9 @@ import 'package:histouric_mobile_frontend/presentation/providers/repositories/ro
 
 import '../../../domain/entities/entities.dart';
 
-typedef GetRoutesThemesCallback = Future<List<RoutesTheme>> Function();
+typedef GetRoutesThemesCallback = Future<List<RouteTheme>> Function();
 
-class RoutesThemesNotifier extends StateNotifier<List<RoutesTheme>?> {
+class RoutesThemesNotifier extends StateNotifier<List<RouteTheme>?> {
   final GetRoutesThemesCallback getRoutesThemesCallback;
 
   RoutesThemesNotifier({required this.getRoutesThemesCallback}) : super(null);
@@ -17,16 +17,16 @@ class RoutesThemesNotifier extends StateNotifier<List<RoutesTheme>?> {
 }
 
 final routesThemesInfoProvider =
-    StateNotifierProvider<RoutesThemesNotifier, List<RoutesTheme>?>((ref) {
+    StateNotifierProvider<RoutesThemesNotifier, List<RouteTheme>?>((ref) {
   final getRoutesThemesCallback =
       ref.watch(routeThemeRepositoryProvider).getRouteThemes;
   return RoutesThemesNotifier(getRoutesThemesCallback: getRoutesThemesCallback);
 });
 
-typedef GetRoutesThemeByIdCallback = Future<RoutesTheme> Function(
+typedef GetRoutesThemeByIdCallback = Future<RouteTheme> Function(
     String routeThemeId);
 
-class RoutesThemeNotifier extends StateNotifier<RoutesTheme?> {
+class RoutesThemeNotifier extends StateNotifier<RouteTheme?> {
   final GetRoutesThemeByIdCallback getRoutesThemeByIdCallback;
 
   RoutesThemeNotifier({required this.getRoutesThemeByIdCallback}) : super(null);
@@ -37,7 +37,7 @@ class RoutesThemeNotifier extends StateNotifier<RoutesTheme?> {
 }
 
 final routesThemeInfoProvider =
-    StateNotifierProvider<RoutesThemeNotifier, RoutesTheme?>((ref) {
+    StateNotifierProvider<RoutesThemeNotifier, RouteTheme?>((ref) {
   final getRoutesThemeByIdCallback =
       ref.watch(routeThemeRepositoryProvider).getRouteThemeById;
   return RoutesThemeNotifier(

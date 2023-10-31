@@ -107,9 +107,9 @@ class _CustomSliverAppbar extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: PageView.builder(
-                itemCount: bic.images.length,
+                itemCount: bic.imagesUris.length,
                 itemBuilder: (context, index) =>
-                    _ImageCard(image: bic.images[index]),
+                    _ImageCard(image: bic.imagesUris[index]),
               ),
             ),
           ],
@@ -201,10 +201,10 @@ class _TitleAndDescription extends StatelessWidget {
 }
 
 class _HistoryCard extends StatelessWidget {
-  final BICHistory historyBIC;
+  final Story story;
 
   const _HistoryCard({
-    required this.historyBIC,
+    required this.story,
   });
 
   @override
@@ -214,7 +214,7 @@ class _HistoryCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push('/$historyScreenPath/${historyBIC.historyId}');
+        context.push('/$historyScreenPath/${story.id}');
       },
       child: FadeIn(
         child: Padding(
@@ -229,7 +229,7 @@ class _HistoryCard extends StatelessWidget {
                         bottomLeft: Radius.circular(30),
                         topLeft: Radius.circular(30)),
                     child: Image.network(
-                      historyBIC.image,
+                      story.images?.first.imageUri ?? '',
                       fit: BoxFit.cover,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress != null) {
@@ -248,16 +248,16 @@ class _HistoryCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        historyBIC.title,
+                        story.title,
                         style: textStyles.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        historyBIC.description,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      // Text(
+                      //   story.description,
+                      //   maxLines: 3,
+                      //   overflow: TextOverflow.ellipsis,
+                      // ),
                     ],
                   ),
                 ),
@@ -297,7 +297,7 @@ class _Histories extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: bic.histories.length,
           itemBuilder: (context, index) => _HistoryCard(
-            historyBIC: bic.histories[index],
+            story: bic.histories[index],
           ),
         ),
       ],

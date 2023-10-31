@@ -27,7 +27,7 @@ class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final RoutesTheme? routesTheme = ref.watch(routesThemeInfoProvider);
+    final RouteTheme? routesTheme = ref.watch(routesThemeInfoProvider);
 
     if (routesTheme == null) {
       return const Center(child: CircularProgressIndicator());
