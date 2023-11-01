@@ -4,3 +4,4 @@ export 'history_screen.dart';
 export 'route_screen.dart';
 export 'routes_themes_screen.dart';
 export 'routes_theme_screen.dart';
+export 'histories_screen.dart';

@@ -21,12 +21,12 @@ class CustomBottomNavigation extends ConsumerWidget {
       backgroundColor: colors.surface,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.map_outlined),
-          label: 'Mapa',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.history_edu_outlined),
           label: 'Historias',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map_outlined),
+          label: 'Mapa',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.directions_outlined),
