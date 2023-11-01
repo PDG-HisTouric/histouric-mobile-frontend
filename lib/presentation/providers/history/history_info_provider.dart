@@ -16,10 +16,11 @@ class HistoryMapNotifier extends StateNotifier<Map<String, Story>> {
 
   HistoryMapNotifier({required this.getHistoryById}) : super({});
 
-  Future<void> loadHistory(String historyId) async {
-    if (state[historyId] != null) return;
+  Future<Story> loadHistory(String historyId) async {
+    if (state[historyId] != null) return state[historyId]!;
     final history = await getHistoryById(historyId);
 
     state = {...state, historyId: history};
+    return history;
   }
 }

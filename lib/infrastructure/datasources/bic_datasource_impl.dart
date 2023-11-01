@@ -25,7 +25,8 @@ class BICDatasourceImpl implements BICDatasource {
 
   @override
   Future<BIC> getBICById(String bicId) {
-    // return Future.value(bics[int.parse(bicId) - 1]);
-    throw UnimplementedError();
+    return dio.get('/$bicId').then((response) {
+      return BICMapper.fromBICResponse(BICResponse.fromJson(response.data));
+    });
   }
 }
