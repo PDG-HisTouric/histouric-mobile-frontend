@@ -4,22 +4,23 @@ import '../../../domain/domain.dart';
 import '../repositories/history_repository_provider.dart';
 
 final historyInfoProvider =
-    StateNotifierProvider<HistoryMapNotifier, Map<String, History>>((ref) {
-  final getHistory = ref.watch(historyRepositoryProvider).getHistory;
-  return HistoryMapNotifier(getHistory: getHistory);
+    StateNotifierProvider<HistoryMapNotifier, Map<String, Story>>((ref) {
+  final getHistoryById = ref.watch(historyRepositoryProvider).getHistoryById;
+  return HistoryMapNotifier(getHistoryById: getHistoryById);
 });
 
-typedef GetHistoryCallback = Future<History> Function(String historyId);
+typedef GetHistoryCallback = Future<Story> Function(String historyId);
 
-class HistoryMapNotifier extends StateNotifier<Map<String, History>> {
-  final GetHistoryCallback getHistory;
+class HistoryMapNotifier extends StateNotifier<Map<String, Story>> {
+  final GetHistoryCallback getHistoryById;
 
-  HistoryMapNotifier({required this.getHistory}) : super({});
+  HistoryMapNotifier({required this.getHistoryById}) : super({});
 
-  Future<void> loadHistory(String historyId) async {
-    if (state[historyId] != null) return;
-    final history = await getHistory(historyId);
+  Future<Story> loadHistory(String historyId) async {
+    if (state[historyId] != null) return state[historyId]!;
+    final history = await getHistoryById(historyId);
 
     state = {...state, historyId: history};
+    return history;
   }
 }

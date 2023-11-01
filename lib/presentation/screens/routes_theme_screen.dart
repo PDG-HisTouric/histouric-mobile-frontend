@@ -19,7 +19,6 @@ class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.routeThemeId);
     ref
         .read(routesThemeInfoProvider.notifier)
         .loadRoutesThemeById(widget.routeThemeId);
@@ -27,7 +26,7 @@ class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final RoutesTheme? routesTheme = ref.watch(routesThemeInfoProvider);
+    final RouteTheme? routesTheme = ref.watch(routesThemeInfoProvider);
 
     if (routesTheme == null) {
       return const Center(child: CircularProgressIndicator());
@@ -36,7 +35,7 @@ class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFE7C18B),
       appBar: AppBar(
-        title: Text(routesTheme!.name),
+        title: Text(routesTheme.name),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -55,10 +54,20 @@ class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
                           vertical: 15,
                         ),
                         child: Center(
-                          child: Text(
-                            textAlign: TextAlign.center,
-                            route.name,
-                            style: Theme.of(context).textTheme.bodyLarge,
+                          child: Column(
+                            children: [
+                              Text(
+                                textAlign: TextAlign.center,
+                                route.name,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                route.description,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ],
                           ),
                         ),
                       ),

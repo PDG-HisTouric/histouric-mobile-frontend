@@ -6,10 +6,7 @@ class HomeScreen extends ConsumerWidget {
   HomeScreen({super.key});
 
   final screens = [
-    const CustomGoogleMap(
-      initialLat: 3.451929471542798,
-      initialLng: -76.5319398863662,
-    ),
+    const HistoriesScreen(),
     const CustomGoogleMap(
       initialLat: 3.451929471542798,
       initialLng: -76.5319398863662,

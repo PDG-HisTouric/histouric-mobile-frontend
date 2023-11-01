@@ -19,20 +19,23 @@ class HistoryScreen extends ConsumerStatefulWidget {
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   bool _isPlaying = false;
   late final AudioPlayer _audioPlayer;
-  late final AssetSource _assetSource;
+  late final UrlSource _urlSource;
 
   Duration _duration = const Duration();
   Duration _position = const Duration();
 
-  History? history;
+  Story? history;
 
-  HistouricText? currentHistoryText;
+  HistoryText? currentHistoryText;
+  HistoryImage? currentHistoryImage;
 
   @override
   void initState() {
     super.initState();
-    ref.read(historyInfoProvider.notifier).loadHistory(widget.historyId);
-    _initAudioPlayer();
+    ref
+        .read(historyInfoProvider.notifier)
+        .loadHistory(widget.historyId)
+        .then((history) => _initAudioPlayer(history.audio.audioUri));
   }
 
   @override
@@ -41,9 +44,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     super.dispose();
   }
 
-  Future<void> _initAudioPlayer() async {
+  Future<void> _initAudioPlayer(String audioUri) async {
     _audioPlayer = AudioPlayer();
-    _assetSource = AssetSource('audios/13PorObraYGraciaDeMicaela.mp3');
+    _urlSource = UrlSource(audioUri);
     _audioPlayer.onDurationChanged.listen((event) {
       setState(() {
         _duration = event;
@@ -53,6 +56,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       setState(() {
         _position = event;
         updateCurrentTextSegment(event);
+        _updateCurrentHistoryImage(event);
       });
     });
     _audioPlayer.onPlayerComplete.listen((event) {
@@ -64,7 +68,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   Future<void> _play() async {
-    await _audioPlayer.play(_assetSource);
+    await _audioPlayer.play(_urlSource);
     setState(() {
       _isPlaying = true;
     });
@@ -77,9 +81,25 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     });
   }
 
-  void updateCurrentTextSegment(Duration position) {
-    HistouricText? newHistoryText;
+  void _updateCurrentHistoryImage(Duration position) {
+    HistoryImage? newHistoryImage;
+    for (var historyImage in history!.images!) {
+      if (position >= Duration(seconds: historyImage.startTime)) {
+        newHistoryImage = historyImage;
+      } else {
+        break;
+      }
+    }
 
+    if (newHistoryImage != currentHistoryImage) {
+      setState(() {
+        currentHistoryImage = newHistoryImage;
+      });
+    }
+  }
+
+  void updateCurrentTextSegment(Duration position) {
+    HistoryText? newHistoryText;
     for (var historyText in history!.texts) {
       if (position >= Duration(seconds: historyText.startTime)) {
         newHistoryText = historyText;
@@ -98,6 +118,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final history = ref.watch(historyInfoProvider)[widget.historyId];
+    final height = MediaQuery.of(context).size.height;
+    final int audioPlayerHeight = 210;
 
     if (history == null) {
       return const SafeArea(
@@ -129,45 +151,80 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 ),
               ),
             ),
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 200,
-                    child: PageView.builder(
-                      itemCount: history.images.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image.network(
-                              history.images[index].imageUrl,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
+            Column(
+              children: [
+                if (currentHistoryImage != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: 200,
+                      child: PageView.builder(
+                          itemCount: history.images?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.network(
+                                      currentHistoryImage!.imageUri,
+                                      fit: BoxFit.contain, loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                    if (loadingProgress != null) {
+                                      return const SizedBox(
+                                        height: 200,
+                                        width: 200,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      );
+                                    }
+                                    return FadeIn(child: child);
+                                  }),
+                                ),
+                              ],
+                            );
+                          }),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  FadeIn(
-                    duration: const Duration(milliseconds: 700),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: NeuBox(
-                        child: Text(
-                          currentHistoryText?.text ??
+                if (currentHistoryText == null)
+                  Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: height - audioPlayerHeight - 170),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: NeuBox(
+                            child: Text(
                               'Presiona play para escuchar la historia',
-                          style: const TextStyle(fontSize: 16),
-                          textAlign: TextAlign.justify,
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (currentHistoryText != null)
+                  Expanded(
+                    child: FadeIn(
+                      duration: const Duration(milliseconds: 700),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: NeuBox(
+                            child: SingleChildScrollView(
+                              child: Text(currentHistoryText!.content,
+                                  style: const TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.justify),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 200),
-                ],
-              ),
+                const SizedBox(height: 210),
+              ],
             ),
             AnimatedPositioned(
               duration: const Duration(milliseconds: 600),
@@ -237,15 +294,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              _audioPlayer.seek(const Duration());
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.skip_previous_outlined),
-                          ),
                           IconButton(
                             onPressed: () {
                               _audioPlayer.seek(
@@ -273,15 +323,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                               setState(() {});
                             },
                             icon: const Icon(Icons.forward_10_outlined),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              _audioPlayer.seek(_duration);
-                              setState(() {
-                                _isPlaying = false;
-                              });
-                            },
-                            icon: const Icon(Icons.skip_next_outlined),
                           ),
                         ],
                       ),

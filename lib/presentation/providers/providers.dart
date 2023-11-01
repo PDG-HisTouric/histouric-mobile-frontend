@@ -10,3 +10,4 @@ export 'permissions/permissions_provider.dart';
 export 'location/user_location_provider.dart';
 export 'routes_theme/routes_theme_info_provider.dart';
 export 'repositories/route_theme_repository_provider.dart';
+export 'history/histories_info_provider.dart';

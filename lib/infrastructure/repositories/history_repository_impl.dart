@@ -6,12 +6,12 @@ class HistoryRepositoryImpl extends HistoryRepository {
   HistoryRepositoryImpl(this.historyDataSource);
 
   @override
-  Future<History> getHistoryById(String historyId) {
+  Future<Story> getHistoryById(String historyId) {
     return historyDataSource.getHistoryById(historyId);
   }
 
   @override
-  Future<History> getHistory(String historyId) {
-    return historyDataSource.getHistory(historyId);
+  Future<List<Story>> getHistoriesByTitle(String title) {
+    return historyDataSource.getHistoriesByTitle(title);
   }
 }

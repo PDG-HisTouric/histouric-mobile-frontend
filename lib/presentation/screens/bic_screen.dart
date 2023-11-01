@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../config/config.dart';
 import '../../domain/entities/entities.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
@@ -59,9 +58,6 @@ class _BICDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final textStyles = Theme.of(context).textTheme;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
@@ -88,7 +84,7 @@ class _CustomSliverAppbar extends ConsumerWidget {
 
     return SliverAppBar(
       backgroundColor: scaffoldBackgroundColor,
-      expandedHeight: size.height * 0.7,
+      expandedHeight: bic.imagesUris.isNotEmpty ? size.height * 0.7 : null,
       leading: IconButton(
         onPressed: () => Navigator.pop(context),
         icon: const Icon(Icons.arrow_back_rounded),
@@ -107,9 +103,9 @@ class _CustomSliverAppbar extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: PageView.builder(
-                itemCount: bic.images.length,
+                itemCount: bic.imagesUris.length,
                 itemBuilder: (context, index) =>
-                    _ImageCard(image: bic.images[index]),
+                    _ImageCard(image: bic.imagesUris[index]),
               ),
             ),
           ],
@@ -200,76 +196,6 @@ class _TitleAndDescription extends StatelessWidget {
   }
 }
 
-class _HistoryCard extends StatelessWidget {
-  final BICHistory historyBIC;
-
-  const _HistoryCard({
-    required this.historyBIC,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final textStyles = Theme.of(context).textTheme;
-    final size = MediaQuery.of(context).size;
-
-    return GestureDetector(
-      onTap: () {
-        context.push('/$historyScreenPath/${historyBIC.historyId}');
-      },
-      child: FadeIn(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: GeneralCard(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: size.width * 0.2,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        topLeft: Radius.circular(30)),
-                    child: Image.network(
-                      historyBIC.image,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress != null) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        return FadeIn(child: child);
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                SizedBox(
-                  width: size.width * 0.6,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        historyBIC.title,
-                        style: textStyles.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        historyBIC.description,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _Histories extends StatelessWidget {
   final BIC bic;
   const _Histories({required this.bic});
@@ -277,6 +203,8 @@ class _Histories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final textStyles = Theme.of(context).textTheme;
+
     return Column(
       children: [
         Padding(
@@ -292,12 +220,28 @@ class _Histories extends StatelessWidget {
             ),
           ),
         ),
+        if (bic.histories.isEmpty)
+          GeneralCard(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "No hay historias para este BIC",
+                    style: textStyles.bodyLarge,
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: bic.histories.length,
-          itemBuilder: (context, index) => _HistoryCard(
-            historyBIC: bic.histories[index],
+          itemBuilder: (context, index) => HistoryCard(
+            story: bic.histories[index],
           ),
         ),
       ],
