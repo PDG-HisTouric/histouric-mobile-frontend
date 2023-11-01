@@ -118,6 +118,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final history = ref.watch(historyInfoProvider)[widget.historyId];
+    final height = MediaQuery.of(context).size.height;
+    final int audioPlayerHeight = 210;
 
     if (history == null) {
       return const SafeArea(
@@ -151,62 +153,76 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             ),
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 200,
-                    child: PageView.builder(
-                        itemCount: history.images?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.network(
-                                    currentHistoryImage?.imageUri ??
-                                        history.images![index].imageUri,
-                                    fit: BoxFit.contain, loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                  if (loadingProgress != null) {
-                                    return const SizedBox(
-                                      height: 200,
-                                      width: 200,
-                                      child: Center(
-                                          child: CircularProgressIndicator()),
-                                    );
-                                  }
-                                  return FadeIn(child: child);
-                                }),
-                              ),
-                            ],
-                          );
-                        }),
+                if (currentHistoryImage != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: 200,
+                      child: PageView.builder(
+                          itemCount: history.images?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.network(
+                                      currentHistoryImage!.imageUri,
+                                      fit: BoxFit.contain, loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                    if (loadingProgress != null) {
+                                      return const SizedBox(
+                                        height: 200,
+                                        width: 200,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      );
+                                    }
+                                    return FadeIn(child: child);
+                                  }),
+                                ),
+                              ],
+                            );
+                          }),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: FadeIn(
-                    duration: const Duration(milliseconds: 700),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: NeuBox(
-                          child: SingleChildScrollView(
+                if (currentHistoryText == null)
+                  Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: height - audioPlayerHeight - 170),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: NeuBox(
                             child: Text(
-                              currentHistoryText?.content ??
-                                  'Presiona play para escuchar la historia',
-                              style: const TextStyle(fontSize: 16),
-                              textAlign: currentHistoryText?.content != null
-                                  ? TextAlign.justify
-                                  : TextAlign.center,
+                              'Presiona play para escuchar la historia',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (currentHistoryText != null)
+                  Expanded(
+                    child: FadeIn(
+                      duration: const Duration(milliseconds: 700),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: NeuBox(
+                            child: SingleChildScrollView(
+                              child: Text(currentHistoryText!.content,
+                                  style: const TextStyle(fontSize: 16),
+                                  textAlign: TextAlign.justify),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 210),
               ],
             ),
