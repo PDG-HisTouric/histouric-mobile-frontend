@@ -8,7 +8,7 @@ final permissionsProvider =
 
 class PermissionsNotifier extends StateNotifier<PermissionState> {
   PermissionsNotifier() : super(PermissionState()) {
-    checkAllPermissions();
+    _checkAllPermissions();
   }
 
   Future<void> requestLocationPermission() async {
@@ -16,7 +16,7 @@ class PermissionsNotifier extends StateNotifier<PermissionState> {
     state = state.copyWith(locationWhenInUse: status);
   }
 
-  Future<void> checkAllPermissions() async {
+  Future<void> _checkAllPermissions() async {
     final status = await Future.wait([
       Permission.location.status,
       Permission.locationWhenInUse.status,

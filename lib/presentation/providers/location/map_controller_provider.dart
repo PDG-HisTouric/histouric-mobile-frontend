@@ -50,7 +50,7 @@ class MapNotifier extends StateNotifier<MapState> {
 
   void setMarkers(List<BIC> bics) async {
     for (var bic in bics) {
-      addMarker(
+      _addMarker(
         latitude: bic.latitude,
         longitude: bic.longitude,
         name: bic.name,
@@ -66,7 +66,7 @@ class MapNotifier extends StateNotifier<MapState> {
   void loadBICsFromBICRepository() async {
     final bics = await bicRepository.getBICs();
     for (var bic in bics) {
-      addMarker(
+      _addMarker(
         latitude: bic.latitude,
         longitude: bic.longitude,
         name: bic.name,
@@ -87,7 +87,7 @@ class MapNotifier extends StateNotifier<MapState> {
     state = state.copyWith(controller: controller, isControllerReady: true);
   }
 
-  goToLocation(double latitude, double longitude) {
+  void goToLocation(double latitude, double longitude) {
     final newPosition = CameraPosition(
       target: LatLng(latitude, longitude),
       zoom: 15,
@@ -97,7 +97,7 @@ class MapNotifier extends StateNotifier<MapState> {
         ?.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }
 
-  void addMarker({
+  void _addMarker({
     required double latitude,
     required double longitude,
     required String name,

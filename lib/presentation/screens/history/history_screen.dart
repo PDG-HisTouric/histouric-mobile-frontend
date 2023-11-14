@@ -3,9 +3,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/domain.dart';
-import '../providers/providers.dart';
-import '../widgets/widgets.dart';
+import '../../../domain/domain.dart';
+import '../../providers/providers.dart';
+import '../../widgets/widgets.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
   final String historyId;

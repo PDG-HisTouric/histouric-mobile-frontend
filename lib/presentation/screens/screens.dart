@@ -1,7 +1,6 @@
 export 'home_screen.dart';
-export 'bic_screen.dart';
-export 'history_screen.dart';
-export 'route_screen.dart';
-export 'routes_themes_screen.dart';
-export 'routes_theme_screen.dart';
-export 'histories_screen.dart';
+export 'bic/bic_screen.dart';
+export 'history/history_screen.dart';
+export 'route/route_screen.dart';
+export 'route/routes_screen.dart';
+export 'history/histories_screen.dart';

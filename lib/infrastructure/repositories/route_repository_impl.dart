@@ -1,6 +1,5 @@
-import 'package:histouric_mobile_frontend/domain/entities/histouric_route.dart';
-
 import '../../domain/datasources/datasources.dart';
+import '../../domain/entities/entities.dart';
 import '../../domain/repositories/repositories.dart';
 
 class RouteRepositoryImpl implements RouteRepository {
@@ -11,5 +10,10 @@ class RouteRepositoryImpl implements RouteRepository {
   @override
   Future<HistouricRoute> getRouteById(String routeId) {
     return routeDataSource.getRouteById(routeId);
+  }
+
+  @override
+  Future<List<SimpleRoute>> getSimplifiedRoutes() {
+    return routeDataSource.getSimplifiedRoutes();
   }
 }

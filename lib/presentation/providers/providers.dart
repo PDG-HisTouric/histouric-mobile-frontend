@@ -8,6 +8,5 @@ export 'bottom_navigation_bar/bottom_navigation_bar_index_provider.dart';
 export 'route/route_info_provider.dart';
 export 'permissions/permissions_provider.dart';
 export 'location/user_location_provider.dart';
-export 'routes_theme/routes_theme_info_provider.dart';
-export 'repositories/route_theme_repository_provider.dart';
 export 'history/histories_info_provider.dart';
+export 'route/simple_routes_info_provider.dart';

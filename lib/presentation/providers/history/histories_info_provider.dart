@@ -23,7 +23,6 @@ class HistoriesMapNotifier extends StateNotifier<List<Story>> {
       return;
     }
     final histories = await getHistoriesByTitle(title);
-    print(histories.length);
     Future.delayed(const Duration(seconds: 5));
     state = [...histories];
   }

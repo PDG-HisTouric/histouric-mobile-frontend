@@ -10,7 +10,6 @@ class RouteMapper {
       name: routeResponse.name,
       description: routeResponse.description,
       owner: HistouricUserMapper.fromHistouricUserResponse(routeResponse.owner),
-      themeName: routeResponse.themeName,
       bics: routeResponse.bics
           .map((bic) => BICMapper.fromBICResponse(bic))
           .toList(),
