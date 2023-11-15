@@ -26,7 +26,7 @@ class CustomBottomNavigation extends ConsumerWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.map_outlined),
-          label: 'Mapa',
+          label: 'BICs',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.directions_outlined),
