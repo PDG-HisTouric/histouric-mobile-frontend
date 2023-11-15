@@ -18,11 +18,12 @@ class HistoryScreen extends ConsumerStatefulWidget {
 
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   bool _isPlaying = false;
+  bool _isAudioLoaded = false;
   late final AudioPlayer _audioPlayer;
   late final UrlSource _urlSource;
 
-  Duration _duration = const Duration();
-  Duration _position = const Duration();
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
 
   Story? history;
 
@@ -68,10 +69,15 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   Future<void> _play() async {
-    await _audioPlayer.play(_urlSource);
     setState(() {
       _isPlaying = true;
     });
+    await _audioPlayer.play(_urlSource);
+    if (!_isAudioLoaded) {
+      setState(() {
+        _isAudioLoaded = true;
+      });
+    }
   }
 
   Future<void> _pause() async {
@@ -133,7 +139,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   Widget build(BuildContext context) {
     final history = ref.watch(historyInfoProvider)[widget.historyId];
     final height = MediaQuery.of(context).size.height;
-    final int audioPlayerHeight = 210;
+    const int audioPlayerHeight = 210;
 
     if (history == null) {
       return const SafeArea(
@@ -319,14 +325,22 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                             },
                             icon: const Icon(Icons.replay_10_outlined),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              _isPlaying ? _pause() : _play();
-                            },
-                            icon: Icon(
-                              _isPlaying
-                                  ? Icons.pause_circle_filled
-                                  : Icons.play_circle_filled,
+                          SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: Center(
+                              child: _isPlaying && !_isAudioLoaded
+                                  ? const CircularProgressIndicator()
+                                  : IconButton(
+                                      onPressed: () {
+                                        _isPlaying ? _pause() : _play();
+                                      },
+                                      icon: Icon(
+                                        _isPlaying
+                                            ? Icons.pause_circle_filled
+                                            : Icons.play_circle_filled,
+                                      ),
+                                    ),
                             ),
                           ),
                           IconButton(
