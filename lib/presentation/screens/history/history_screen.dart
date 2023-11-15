@@ -115,6 +115,20 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     }
   }
 
+  //Obtained from https://www.youtube.com/watch?v=MB3YGQ-O1lk
+  String _formatTime(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return [
+      if (duration.inHours > 0) hours,
+      minutes,
+      seconds,
+    ].join(":");
+  }
+
   @override
   Widget build(BuildContext context) {
     final history = ref.watch(historyInfoProvider)[widget.historyId];
@@ -264,14 +278,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${_position.inMinutes}:${_position.inSeconds.remainder(60)}',
+                            _formatTime(_position),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            '${_duration.inMinutes}:${_duration.inSeconds.remainder(60)}',
+                            _formatTime(_duration - _position),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
