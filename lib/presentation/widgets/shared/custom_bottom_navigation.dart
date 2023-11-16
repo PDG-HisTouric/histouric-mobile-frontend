@@ -17,6 +17,12 @@ class CustomBottomNavigation extends ConsumerWidget {
       currentIndex: bottomNavigationBarIndex,
       onTap: (index) {
         ref.read(bottomNavigationBarIndexProvider.notifier).state = index;
+        if (index == 0) {
+          ref.read(historiesInfoProvider.notifier).getHistories();
+        }
+        if (index == 2) {
+          ref.read(simpleRoutesInfoProvider.notifier).loadSimpleRoutes();
+        }
       },
       backgroundColor: colors.surface,
       items: const [

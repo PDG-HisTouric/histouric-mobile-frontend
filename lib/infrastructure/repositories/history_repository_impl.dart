@@ -14,4 +14,9 @@ class HistoryRepositoryImpl extends HistoryRepository {
   Future<List<Story>> getHistoriesByTitle(String title) {
     return historyDataSource.getHistoriesByTitle(title);
   }
+
+  @override
+  Future<List<Story>> getHistories() {
+    return historyDataSource.getHistories();
+  }
 }

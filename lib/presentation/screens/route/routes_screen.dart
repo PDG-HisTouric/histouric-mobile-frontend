@@ -16,14 +16,17 @@ class RoutesScreen extends ConsumerStatefulWidget {
 
 class _RouteThemeScreenState extends ConsumerState<RoutesScreen> {
   @override
-  void initState() {
-    super.initState();
-    ref.read(simpleRoutesInfoProvider.notifier).loadSimpleRoutes();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final List<SimpleRoute> simpleRoutes = ref.watch(simpleRoutesInfoProvider);
+    final (simpleRoutes, areRoutesLoading) =
+        ref.watch(simpleRoutesInfoProvider);
+
+    if (areRoutesLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFE7C18B),

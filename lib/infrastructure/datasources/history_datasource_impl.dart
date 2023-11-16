@@ -29,4 +29,12 @@ class HistoryDataSourceImpl extends HistoryDataSource {
             HistoryResponse.fromJson(history)))
         .toList());
   }
+
+  @override
+  Future<List<Story>> getHistories() {
+    return dio.get('').then((value) => value.data
+        .map<Story>((history) => HistoryMapper.fromHistoryResponseToHistory(
+            HistoryResponse.fromJson(history)))
+        .toList());
+  }
 }
