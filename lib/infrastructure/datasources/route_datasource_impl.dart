@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:histouric_mobile_frontend/domain/entities/histouric_route.dart';
 
 import '../../config/constants/constants.dart';
 import '../../domain/datasources/datasources.dart';
@@ -20,5 +19,13 @@ class RouteDatasourceImpl implements RouteDataSource {
     return dio.get('/$routeId').then((response) =>
         RouteMapper.fromRouteResponseToRoute(
             RouteResponse.fromJson(response.data)));
+  }
+
+  @override
+  Future<List<SimpleRoute>> getSimplifiedRoutes() {
+    return dio.get('/search').then((response) => (response.data as List)
+        .map((route) => SimpleRouteMapper.fromSimpleRouteResponseToRoute(
+            SimpleRouteResponse.fromJson(route)))
+        .toList());
   }
 }

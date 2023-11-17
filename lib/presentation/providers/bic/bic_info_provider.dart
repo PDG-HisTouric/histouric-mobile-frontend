@@ -11,7 +11,12 @@ class BICNotifier extends StateNotifier<BIC?> {
   BICNotifier({required this.getBICCallback}) : super(null);
 
   Future<void> loadBIC(String bicId) async {
+    clearBIC();
     state = await getBICCallback(bicId);
+  }
+
+  void clearBIC() {
+    state = null;
   }
 }
 

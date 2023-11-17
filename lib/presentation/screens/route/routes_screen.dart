@@ -5,41 +5,37 @@ import 'package:histouric_mobile_frontend/config/config.dart';
 import 'package:histouric_mobile_frontend/domain/domain.dart';
 import 'package:histouric_mobile_frontend/presentation/presentation.dart';
 
-import '../widgets/widgets.dart';
+import '../../widgets/widgets.dart';
 
-class RouteThemeScreen extends ConsumerStatefulWidget {
-  final String routeThemeId;
-  const RouteThemeScreen({super.key, required this.routeThemeId});
+class RoutesScreen extends ConsumerStatefulWidget {
+  const RoutesScreen({super.key});
 
   @override
-  ConsumerState<RouteThemeScreen> createState() => _RouteThemeScreenState();
+  ConsumerState<RoutesScreen> createState() => _RouteThemeScreenState();
 }
 
-class _RouteThemeScreenState extends ConsumerState<RouteThemeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    ref
-        .read(routesThemeInfoProvider.notifier)
-        .loadRoutesThemeById(widget.routeThemeId);
-  }
-
+class _RouteThemeScreenState extends ConsumerState<RoutesScreen> {
   @override
   Widget build(BuildContext context) {
-    final RouteTheme? routesTheme = ref.watch(routesThemeInfoProvider);
+    final (simpleRoutes, areRoutesLoading) =
+        ref.watch(simpleRoutesInfoProvider);
 
-    if (routesTheme == null) {
-      return const Center(child: CircularProgressIndicator());
+    if (areRoutesLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
     return Scaffold(
       backgroundColor: const Color(0xFFE7C18B),
       appBar: AppBar(
-        title: Text(routesTheme.name),
+        title: Text("Rutas"),
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: routesTheme.routes
+          children: simpleRoutes
               .map(
                 (route) => Padding(
                   padding: const EdgeInsets.all(10),

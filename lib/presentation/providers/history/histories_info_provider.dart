@@ -3,28 +3,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/domain.dart';
 import '../repositories/history_repository_provider.dart';
 
-final historiesInfoProvider =
-    StateNotifierProvider<HistoriesMapNotifier, List<Story>>((ref) {
-  final getHistoriesByTitle =
-      ref.watch(historyRepositoryProvider).getHistoriesByTitle;
-  return HistoriesMapNotifier(getHistoriesByTitle: getHistoriesByTitle);
-});
+typedef GetHistoriesByTitleCallback = Future<List<Story>> Function(
+    String title);
+typedef GetHistoriesCallback = Future<List<Story>> Function();
 
-typedef GetHistoriesCallback = Future<List<Story>> Function(String title);
+class HistoriesMapNotifier extends StateNotifier<(List<Story>, bool)> {
+  final GetHistoriesByTitleCallback _getHistoriesByTitle;
+  final GetHistoriesCallback _getHistories;
 
-class HistoriesMapNotifier extends StateNotifier<List<Story>> {
-  final GetHistoriesCallback getHistoriesByTitle;
+  HistoriesMapNotifier(this._getHistoriesByTitle, this._getHistories)
+      : super(([], false));
 
-  HistoriesMapNotifier({required this.getHistoriesByTitle}) : super([]);
-
-  Future<void> getHistories(String title) async {
+  Future<void> getHistoriesByTitle(String title) async {
     if (title.isEmpty) {
-      state = [];
+      getHistories();
       return;
     }
-    final histories = await getHistoriesByTitle(title);
-    print(histories.length);
-    Future.delayed(const Duration(seconds: 5));
-    state = [...histories];
+    state = (state.$1, true);
+    final histories = await _getHistoriesByTitle(title);
+    state = (histories, false);
+  }
+
+  Future<void> getHistories() async {
+    state = (state.$1, true);
+    final histories = await _getHistories();
+    state = (histories, false);
   }
 }
+
+final historiesInfoProvider =
+    StateNotifierProvider<HistoriesMapNotifier, (List<Story>, bool)>((ref) {
+  final getHistoriesByTitle =
+      ref.watch(historyRepositoryProvider).getHistoriesByTitle;
+  final getHistories = ref.watch(historyRepositoryProvider).getHistories;
+  return HistoriesMapNotifier(getHistoriesByTitle, getHistories);
+});

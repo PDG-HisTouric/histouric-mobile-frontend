@@ -3,9 +3,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/domain.dart';
-import '../providers/providers.dart';
-import '../widgets/widgets.dart';
+import '../../../domain/domain.dart';
+import '../../providers/providers.dart';
+import '../../widgets/widgets.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
   final String historyId;
@@ -18,11 +18,15 @@ class HistoryScreen extends ConsumerStatefulWidget {
 
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   bool _isPlaying = false;
+  bool _isAudioLoaded = false;
   late final AudioPlayer _audioPlayer;
   late final UrlSource _urlSource;
 
-  Duration _duration = const Duration();
-  Duration _position = const Duration();
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+
+  String _positionFormatted = "00:00";
+  String _remainderFormatted = "00:00";
 
   Story? history;
 
@@ -32,10 +36,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-    ref
-        .read(historyInfoProvider.notifier)
-        .loadHistory(widget.historyId)
-        .then((history) => _initAudioPlayer(history.audio.audioUri));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(historyInfoProvider.notifier)
+          .loadHistory(widget.historyId)
+          .then((history) => _initAudioPlayer(history.audio.audioUri));
+    });
   }
 
   @override
@@ -53,10 +59,23 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       });
     });
     _audioPlayer.onPositionChanged.listen((event) {
+      String tempPositionFormatted = _formatTimeFromSeconds(event.inSeconds);
+      String tempRemainderFormatted =
+          _formatTimeFromSeconds(_duration.inSeconds - event.inSeconds);
+      print("actual: $tempPositionFormatted");
+      print("lo que falta: $tempRemainderFormatted");
+      HistoryText? currentText = _getCurrentTextSegment(event);
+      HistoryImage? currentImage = _getCurrentHistoryImage(event);
       setState(() {
         _position = event;
-        updateCurrentTextSegment(event);
-        _updateCurrentHistoryImage(event);
+        if (currentText != currentHistoryText) {
+          currentHistoryText = currentText;
+        }
+        if (currentImage != currentHistoryImage) {
+          currentHistoryImage = currentImage;
+        }
+        _remainderFormatted = tempRemainderFormatted;
+        _positionFormatted = tempPositionFormatted;
       });
     });
     _audioPlayer.onPlayerComplete.listen((event) {
@@ -68,10 +87,15 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   Future<void> _play() async {
-    await _audioPlayer.play(_urlSource);
     setState(() {
       _isPlaying = true;
     });
+    await _audioPlayer.play(_urlSource);
+    if (!_isAudioLoaded) {
+      setState(() {
+        _isAudioLoaded = true;
+      });
+    }
   }
 
   Future<void> _pause() async {
@@ -81,7 +105,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     });
   }
 
-  void _updateCurrentHistoryImage(Duration position) {
+  HistoryImage? _getCurrentHistoryImage(Duration position) {
     HistoryImage? newHistoryImage;
     for (var historyImage in history!.images!) {
       if (position >= Duration(seconds: historyImage.startTime)) {
@@ -90,15 +114,23 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         break;
       }
     }
-
-    if (newHistoryImage != currentHistoryImage) {
-      setState(() {
-        currentHistoryImage = newHistoryImage;
-      });
-    }
+    return newHistoryImage;
   }
 
-  void updateCurrentTextSegment(Duration position) {
+  String _formatTimeFromSeconds(int totalSeconds) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(totalSeconds ~/ 3600);
+    final minutes = twoDigits(totalSeconds ~/ 60);
+    final seconds = twoDigits(totalSeconds % 60);
+
+    return [
+      if (totalSeconds ~/ 3600 > 0) hours,
+      minutes,
+      seconds,
+    ].join(":");
+  }
+
+  HistoryText? _getCurrentTextSegment(Duration position) {
     HistoryText? newHistoryText;
     for (var historyText in history!.texts) {
       if (position >= Duration(seconds: historyText.startTime)) {
@@ -107,19 +139,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         break;
       }
     }
-
-    if (newHistoryText != currentHistoryText) {
-      setState(() {
-        currentHistoryText = newHistoryText;
-      });
-    }
+    return newHistoryText;
   }
 
   @override
   Widget build(BuildContext context) {
     final history = ref.watch(historyInfoProvider)[widget.historyId];
     final height = MediaQuery.of(context).size.height;
-    final int audioPlayerHeight = 210;
+    const int audioPlayerHeight = 210;
 
     if (history == null) {
       return const SafeArea(
@@ -264,14 +291,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${_position.inMinutes}:${_position.inSeconds.remainder(60)}',
+                            _positionFormatted,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            '${_duration.inMinutes}:${_duration.inSeconds.remainder(60)}',
+                            _remainderFormatted,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -305,14 +332,22 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                             },
                             icon: const Icon(Icons.replay_10_outlined),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              _isPlaying ? _pause() : _play();
-                            },
-                            icon: Icon(
-                              _isPlaying
-                                  ? Icons.pause_circle_filled
-                                  : Icons.play_circle_filled,
+                          SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: Center(
+                              child: _isPlaying && !_isAudioLoaded
+                                  ? const CircularProgressIndicator()
+                                  : IconButton(
+                                      onPressed: () {
+                                        _isPlaying ? _pause() : _play();
+                                      },
+                                      icon: Icon(
+                                        _isPlaying
+                                            ? Icons.pause_circle_filled
+                                            : Icons.play_circle_filled,
+                                      ),
+                                    ),
                             ),
                           ),
                           IconButton(

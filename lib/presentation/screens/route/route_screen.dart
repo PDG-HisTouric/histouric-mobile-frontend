@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:histouric_mobile_frontend/config/helpers/dialogs.dart';
 import 'package:histouric_mobile_frontend/domain/domain.dart';
 
-import '../providers/providers.dart';
-import '../widgets/widgets.dart';
+import '../../providers/providers.dart';
+import '../../widgets/widgets.dart';
 
 class RouteScreen extends ConsumerStatefulWidget {
   final String routeId;

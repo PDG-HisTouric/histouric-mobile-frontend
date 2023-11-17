@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/config.dart';
 import '../../../domain/domain.dart';
-import '../repositories/bic_repository_provider.dart';
+import '../providers.dart';
 
 class MapState {
   final bool isControllerReady;
@@ -42,15 +42,17 @@ class MapState {
 class MapNotifier extends StateNotifier<MapState> {
   final BICRepository bicRepository;
   final BuildContext context;
+  final Future<void> Function(String id) loadBIC;
 
   MapNotifier({
     required this.bicRepository,
     required this.context,
+    required this.loadBIC,
   }) : super(MapState());
 
   void setMarkers(List<BIC> bics) async {
     for (var bic in bics) {
-      addMarker(
+      _addMarker(
         latitude: bic.latitude,
         longitude: bic.longitude,
         name: bic.name,
@@ -66,7 +68,7 @@ class MapNotifier extends StateNotifier<MapState> {
   void loadBICsFromBICRepository() async {
     final bics = await bicRepository.getBICs();
     for (var bic in bics) {
-      addMarker(
+      _addMarker(
         latitude: bic.latitude,
         longitude: bic.longitude,
         name: bic.name,
@@ -87,7 +89,7 @@ class MapNotifier extends StateNotifier<MapState> {
     state = state.copyWith(controller: controller, isControllerReady: true);
   }
 
-  goToLocation(double latitude, double longitude) {
+  void goToLocation(double latitude, double longitude) {
     final newPosition = CameraPosition(
       target: LatLng(latitude, longitude),
       zoom: 15,
@@ -97,7 +99,7 @@ class MapNotifier extends StateNotifier<MapState> {
         ?.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }
 
-  void addMarker({
+  void _addMarker({
     required double latitude,
     required double longitude,
     required String name,
@@ -111,6 +113,7 @@ class MapNotifier extends StateNotifier<MapState> {
         title: name,
         snippet: snippet,
         onTap: () {
+          loadBIC(bicId);
           context.push('/$bicScreenPath/$bicId');
         },
       ),
@@ -123,5 +126,10 @@ class MapNotifier extends StateNotifier<MapState> {
 final mapProvider = StateNotifierProvider.autoDispose
     .family<MapNotifier, MapState, BuildContext>((ref, context) {
   final bicRepository = ref.watch(bicRepositoryProvider);
-  return MapNotifier(bicRepository: bicRepository, context: context);
+  final loadBIC = ref.watch(bicInfoProvider.notifier).loadBIC;
+  return MapNotifier(
+    bicRepository: bicRepository,
+    context: context,
+    loadBIC: loadBIC,
+  );
 });

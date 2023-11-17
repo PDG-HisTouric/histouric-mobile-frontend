@@ -29,13 +29,6 @@ final appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: '/$routeThemeScreenPath/:routeThemeId',
-      builder: (context, state) {
-        final routeThemeId = state.pathParameters['routeThemeId'] ?? 'no-id';
-        return RouteThemeScreen(routeThemeId: routeThemeId);
-      },
-    ),
-    GoRoute(
       path: '/$routeScreenPath/:routeId',
       builder: (context, state) {
         final routeId = state.pathParameters['routeId'] ?? 'no-id';
