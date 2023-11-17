@@ -28,7 +28,6 @@ class __MapViewState extends ConsumerState<CustomGoogleMap> {
   @override
   Widget build(BuildContext context) {
     final mapController = ref.watch(mapProvider(context));
-    final permissions = ref.watch(permissionsProvider);
 
     return GoogleMap(
       markers: mapController.markersSet,
@@ -43,7 +42,6 @@ class __MapViewState extends ConsumerState<CustomGoogleMap> {
       onMapCreated: (controller) {
         controller.getVisibleRegion().then((value) async {
           ref.read(mapProvider(context).notifier).setMapController(controller);
-
           ref.read(mapProvider(context).notifier).loadBICsFromBICRepository();
         });
       },

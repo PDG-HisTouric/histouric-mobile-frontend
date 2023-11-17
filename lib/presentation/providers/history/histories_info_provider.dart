@@ -25,11 +25,8 @@ class HistoriesMapNotifier extends StateNotifier<(List<Story>, bool)> {
   }
 
   Future<void> getHistories() async {
-    print("desde el provider antes de buscar histories 1");
     state = (state.$1, true);
-    print("desde el provider antes de buscar histories 2");
     final histories = await _getHistories();
-    print("desde el provider histories: ${histories.length}");
     state = (histories, false);
   }
 }

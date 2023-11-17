@@ -20,7 +20,6 @@ class _BICScreenState extends ConsumerState<BICScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(bicInfoProvider.notifier).loadBIC(widget.bicId);
   }
 
   @override

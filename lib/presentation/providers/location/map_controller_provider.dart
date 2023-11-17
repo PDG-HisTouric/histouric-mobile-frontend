@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/config.dart';
 import '../../../domain/domain.dart';
-import '../repositories/bic_repository_provider.dart';
+import '../providers.dart';
 
 class MapState {
   final bool isControllerReady;
@@ -42,10 +42,12 @@ class MapState {
 class MapNotifier extends StateNotifier<MapState> {
   final BICRepository bicRepository;
   final BuildContext context;
+  final Future<void> Function(String id) loadBIC;
 
   MapNotifier({
     required this.bicRepository,
     required this.context,
+    required this.loadBIC,
   }) : super(MapState());
 
   void setMarkers(List<BIC> bics) async {
@@ -111,6 +113,7 @@ class MapNotifier extends StateNotifier<MapState> {
         title: name,
         snippet: snippet,
         onTap: () {
+          loadBIC(bicId);
           context.push('/$bicScreenPath/$bicId');
         },
       ),
@@ -123,5 +126,10 @@ class MapNotifier extends StateNotifier<MapState> {
 final mapProvider = StateNotifierProvider.autoDispose
     .family<MapNotifier, MapState, BuildContext>((ref, context) {
   final bicRepository = ref.watch(bicRepositoryProvider);
-  return MapNotifier(bicRepository: bicRepository, context: context);
+  final loadBIC = ref.watch(bicInfoProvider.notifier).loadBIC;
+  return MapNotifier(
+    bicRepository: bicRepository,
+    context: context,
+    loadBIC: loadBIC,
+  );
 });

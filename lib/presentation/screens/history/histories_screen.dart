@@ -14,7 +14,6 @@ class _HistoriesScreenState extends ConsumerState<HistoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final (histories, areHistoriesLoading) = ref.watch(historiesInfoProvider);
-    print("areHistoriesLoading: $areHistoriesLoading");
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -46,14 +45,6 @@ class _HistoriesScreenState extends ConsumerState<HistoriesScreen> {
                     },
                   ),
           ),
-          // if (areHistoriesLoading)
-          //   const Column(
-          //     children: [
-          //       Spacer(),
-          //       CircularProgressIndicator(),
-          //       Spacer(),
-          //     ],
-          //   ),
         ],
       ),
     );

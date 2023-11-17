@@ -25,6 +25,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
 
+  String _positionFormatted = "00:00";
+  String _remainderFormatted = "00:00";
+
   Story? history;
 
   HistoryText? currentHistoryText;
@@ -33,10 +36,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-    ref
-        .read(historyInfoProvider.notifier)
-        .loadHistory(widget.historyId)
-        .then((history) => _initAudioPlayer(history.audio.audioUri));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(historyInfoProvider.notifier)
+          .loadHistory(widget.historyId)
+          .then((history) => _initAudioPlayer(history.audio.audioUri));
+    });
   }
 
   @override
@@ -54,10 +59,23 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       });
     });
     _audioPlayer.onPositionChanged.listen((event) {
+      String tempPositionFormatted = _formatTimeFromSeconds(event.inSeconds);
+      String tempRemainderFormatted =
+          _formatTimeFromSeconds(_duration.inSeconds - event.inSeconds);
+      print("actual: $tempPositionFormatted");
+      print("lo que falta: $tempRemainderFormatted");
+      HistoryText? currentText = _getCurrentTextSegment(event);
+      HistoryImage? currentImage = _getCurrentHistoryImage(event);
       setState(() {
         _position = event;
-        updateCurrentTextSegment(event);
-        _updateCurrentHistoryImage(event);
+        if (currentText != currentHistoryText) {
+          currentHistoryText = currentText;
+        }
+        if (currentImage != currentHistoryImage) {
+          currentHistoryImage = currentImage;
+        }
+        _remainderFormatted = tempRemainderFormatted;
+        _positionFormatted = tempPositionFormatted;
       });
     });
     _audioPlayer.onPlayerComplete.listen((event) {
@@ -87,7 +105,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     });
   }
 
-  void _updateCurrentHistoryImage(Duration position) {
+  HistoryImage? _getCurrentHistoryImage(Duration position) {
     HistoryImage? newHistoryImage;
     for (var historyImage in history!.images!) {
       if (position >= Duration(seconds: historyImage.startTime)) {
@@ -96,15 +114,23 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         break;
       }
     }
-
-    if (newHistoryImage != currentHistoryImage) {
-      setState(() {
-        currentHistoryImage = newHistoryImage;
-      });
-    }
+    return newHistoryImage;
   }
 
-  void updateCurrentTextSegment(Duration position) {
+  String _formatTimeFromSeconds(int totalSeconds) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(totalSeconds ~/ 3600);
+    final minutes = twoDigits(totalSeconds ~/ 60);
+    final seconds = twoDigits(totalSeconds % 60);
+
+    return [
+      if (totalSeconds ~/ 3600 > 0) hours,
+      minutes,
+      seconds,
+    ].join(":");
+  }
+
+  HistoryText? _getCurrentTextSegment(Duration position) {
     HistoryText? newHistoryText;
     for (var historyText in history!.texts) {
       if (position >= Duration(seconds: historyText.startTime)) {
@@ -113,26 +139,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         break;
       }
     }
-
-    if (newHistoryText != currentHistoryText) {
-      setState(() {
-        currentHistoryText = newHistoryText;
-      });
-    }
-  }
-
-  //Obtained from https://www.youtube.com/watch?v=MB3YGQ-O1lk
-  String _formatTime(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    final hours = twoDigits(duration.inHours);
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-
-    return [
-      if (duration.inHours > 0) hours,
-      minutes,
-      seconds,
-    ].join(":");
+    return newHistoryText;
   }
 
   @override
@@ -284,14 +291,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            _formatTime(_position),
+                            _positionFormatted,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            _formatTime(_duration - _position),
+                            _remainderFormatted,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
